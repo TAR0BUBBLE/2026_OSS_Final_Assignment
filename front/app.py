@@ -145,9 +145,7 @@ ARROW_RIGHT_ORANGE_URI = image_to_data_uri(ARROW_RIGHT_ORANGE_PATH)
 # =========================================================
 
 APP_HTML = f"""
-<!-- ===================================================== 00. 전체 애플리케이션 컨테이너 - 홈, 환영, 퀴즈 화면 전체를 감싸는 최상위 요소 ===================================================== -->
 <main id="ow-app" data-screen="home">
-    <!-- ================================================= 01. 전체 화면 공통 배경 - 배경 사진 - 화면별 밝기를 조절하는 오버레이 ================================================= -->
     <img
         class="background-image"
         src="{BACKGROUND_URI}"
@@ -157,7 +155,6 @@ APP_HTML = f"""
     />
     <div class="background-shade" aria-hidden="true"></div>
 
-    <!-- ================================================= 02. 환영·퀴즈 화면 공통 캐릭터 이미지 - 초기 홈 화면에서는 숨김 - 상단 헤더보다 낮은 depth에 배치 ================================================= -->
     <img
         class="character-image"
         src="{CHARACTER_URI}"
@@ -165,7 +162,6 @@ APP_HTML = f"""
         draggable="false"
     />
 
-    <!-- ================================================= 03. 모든 화면에서 고정되는 상단 헤더 - 오버워치 홈 버튼 - 과목명 - 학번과 이름 ================================================= -->
     <header class="app-header">
         <button
             id="home-button"
@@ -187,8 +183,6 @@ APP_HTML = f"""
         </div>
     </header>
 
-    
-    <!-- ================================================= 04. 초기 홈 화면 - OVERWATCH 워드마크 - Find Your Hero 제목 - 환영 화면 이동 버튼 ================================================= -->
     <section id="home-screen" class="screen home-screen active">
         <img
             class="home-wordmark"
@@ -212,7 +206,6 @@ APP_HTML = f"""
         </button>
     </section>
 
-    <!-- ================================================= 05. 환영 화면 - 환영 문구 - 퀴즈 시작 버튼 ================================================= -->
     <section id="welcome-screen" class="screen welcome-screen">
         <div class="welcome-copy">
             <h1 class="welcome-title">
@@ -235,12 +228,8 @@ APP_HTML = f"""
         </button>
     </section>
 
-    
-    <!-- ================================================= 06. 퀴즈 화면 전체 - 질문 패널 - 이전·다음 화살표 - 8단계 진행도 ================================================= -->
     <section id="quiz-screen" class="screen quiz-screen">
         <div id="question-viewport" class="question-viewport">
-
-            <!-- ========================================= Q1. 선호 역할 질문 - 돌격, 공격, 지원, 잘 모르겠어요 - 카드형 단일 선택 ========================================= -->
             <article id="question-1" class="question-panel question-one-panel">
                 <div class="question-copy">
                     <h1 class="question-title">
@@ -340,8 +329,7 @@ APP_HTML = f"""
                 </div>
             </article>
 
-
-            <!-- ========================================= Q2. 선호 교전 거리 질문 - 현재는 디자인 적용 전 임시 화면 ========================================= -->
+            <!-- Q2. 선호 교전 거리 질문 -->
             <article id="question-2" class="question-panel question-two-panel">
                 <div class="question-copy">
                     <h1 class="question-title">
@@ -350,12 +338,117 @@ APP_HTML = f"""
                     </h1>
 
                     <p class="question-description">
-                        두 번째 질문 화면은 다음 단계에서 구현할 예정입니다.
+                        어느 거리에서 싸우는 것이 가장 편한가요?
                     </p>
                 </div>
 
-                <div class="placeholder-card">
-                    Q2 화면 준비 중
+                <div
+                    class="range-answer"
+                    role="group"
+                    aria-label="선호 교전 거리"
+                >
+                    <div class="range-label-row">
+                        <button
+                            class="range-option"
+                            type="button"
+                            data-range="1"
+                            aria-pressed="false"
+                        >
+                            단거리
+                        </button>
+
+                        <button
+                            class="range-option"
+                            type="button"
+                            data-range="3"
+                            aria-pressed="false"
+                        >
+                            중거리
+                        </button>
+
+                        <button
+                            class="range-option"
+                            type="button"
+                            data-range="5"
+                            aria-pressed="false"
+                        >
+                            장거리
+                        </button>
+                    </div>
+
+                    <div class="range-slider-wrapper">
+                        <input
+                            id="range-slider"
+                            class="range-slider"
+                            type="range"
+                            min="1"
+                            max="5"
+                            step="2"
+                            value="3"
+                            aria-label="선호 교전 거리 선택"
+                            aria-valuetext="선택하지 않음"
+                        />
+                    </div>
+
+                    <div class="range-description-row">
+                        <span>적에게 가까이 접근해서 싸워요</span>
+                        <span>적당한 거리를 유지하며 싸워요</span>
+                        <span>멀리서 안전하게 공격해요</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Q3. 조준 자신감 질문 -->
+            <article id="question-3" class="question-panel question-three-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q3.</span>
+                        <span>조준 자신감</span>
+                    </h1>
+
+                    <p class="question-description">
+                        정확한 조준에 얼마나 자신이 있나요?
+                    </p>
+                </div>
+
+                <div
+                    class="range-answer aim-answer"
+                    role="group"
+                    aria-label="조준 실력"
+                >
+                    <div class="range-label-row aim-label-row">
+                        <button
+                            class="range-option aim-option"
+                            type="button"
+                            data-aim="1"
+                            aria-pressed="false"
+                        >
+                            조준 실력 낮음
+                        </button>
+
+                        <button
+                            class="range-option aim-option"
+                            type="button"
+                            data-aim="5"
+                            aria-pressed="false"
+                        >
+                            조준 실력 높음
+                        </button>
+                    </div>
+
+                    <div class="range-slider-wrapper">
+                        <input
+                            id="aim-slider"
+                            class="range-slider aim-slider"
+                            type="range"
+                            min="1"
+                            max="5"
+                            step="1"
+                            value="3"
+                            aria-label="조준 자신감 선택"
+                            aria-valuetext="선택하지 않음"
+                        />
+                    </div>
                 </div>
             </article>
         </div>
@@ -985,50 +1078,41 @@ button,
 }
 
 .question-panel.enter-from-right {
-    z-index: 1;
+    visibility: visible;
+    pointer-events: auto;
 
-    visibility: visible; 
-    pointer-events: none; 
-    animation: 
-        slide-in-right 420ms 
-        cubic-bezier(0.22, 1, 0.36, 1) 
-        both;
+    animation:
+        slide-in-right 420ms
+        cubic-bezier(0.22, 1, 0.36, 1)
+        forwards;
 }
 
 .question-panel.leave-to-left {
-    z-index: 2;
-
     visibility: visible;
-    pointer-events: none;
 
     animation:
         slide-out-left 360ms
         cubic-bezier(0.55, 0, 1, 0.45)
-        both;
+        forwards;
 }
 
 .question-panel.enter-from-left {
-    z-index: 1;
-
     visibility: visible;
-    pointer-events: none;
+    pointer-events: auto;
 
     animation:
         slide-in-left 420ms
         cubic-bezier(0.22, 1, 0.36, 1)
-        both;
+        forwards;
 }
 
 .question-panel.leave-to-right {
-    z-index: 2;
-
     visibility: visible;
-    pointer-events: none;
 
     animation:
         slide-out-right 360ms
         cubic-bezier(0.55, 0, 1, 0.45)
-        both;
+        forwards;
 }
 
 .question-title {
@@ -1234,30 +1318,228 @@ button,
 }
 
 /* ========================================================
-   Q2 임시 카드
+   Q2·Q3 공통 슬라이더
 ======================================================== */
 
-.placeholder-card {
-    margin-top: 76px;
+.range-answer {
+    margin-top: 105px;
 
     width: 100%;
-    height: 348px;
+    max-width: 1040px;
 
+    padding: 0 18px;
+}
+
+.range-label-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+
+    margin-bottom: 38px;
+}
+
+.range-option {
+    margin: 0;
+    padding: 8px 12px;
+
+    color: #4db5fb;
+    background: transparent;
+    border: 0;
+
+    font-size: clamp(25px, 1.75vw, 34px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -1px;
+
+    cursor: pointer;
+
+    transition:
+        color 160ms ease,
+        transform 160ms ease,
+        text-shadow 160ms ease;
+}
+
+.range-option:first-child {
+    text-align: left;
+    justify-self: start;
+}
+
+.range-option:nth-child(2) {
+    text-align: center;
+    justify-self: center;
+}
+
+.range-option:last-child {
+    text-align: right;
+    justify-self: end;
+}
+
+.range-option:hover {
+    color: #79c9ff;
+    transform: translateY(-4px);
+}
+
+.range-option.selected {
+    color: var(--accent-orange);
+
+    text-shadow:
+        0 0 18px rgba(237, 108, 37, 0.28);
+
+    transform: translateY(-3px);
+}
+
+.range-slider-wrapper {
+    width: 100%;
+    padding: 0 4px;
+}
+
+.range-slider {
+    width: 100%;
+    height: 52px;
+
+    margin: 0;
+
+    background: transparent;
+    cursor: pointer;
+
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.range-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 18px;
+
+    background: rgba(255, 255, 255, 0.94);
+    border-radius: 999px;
+
+    box-shadow:
+        0 5px 16px rgba(0, 0, 0, 0.20);
+}
+
+.range-slider::-webkit-slider-thumb {
+    width: 50px;
+    height: 50px;
+
+    margin-top: -16px;
+
+    background: var(--accent-orange);
+    border: 0;
+    border-radius: 50%;
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.28);
+
+    cursor: grab;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    transition:
+        transform 140ms ease,
+        background-color 140ms ease,
+        box-shadow 140ms ease;
+}
+
+.range-slider:hover::-webkit-slider-thumb {
+    background: var(--accent-orange-hover);
+    transform: scale(1.08);
+
+    box-shadow:
+        0 9px 24px rgba(237, 108, 37, 0.38);
+}
+
+.range-slider:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.range-slider::-moz-range-track {
+    width: 100%;
+    height: 18px;
+
+    background: rgba(255, 255, 255, 0.94);
+    border: 0;
+    border-radius: 999px;
+
+    box-shadow:
+        0 5px 16px rgba(0, 0, 0, 0.20);
+}
+
+.range-slider::-moz-range-thumb {
+    width: 50px;
+    height: 50px;
+
+    background: var(--accent-orange);
+    border: 0;
+    border-radius: 50%;
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.28);
+
+    cursor: grab;
+}
+
+.range-description-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    margin-top: 31px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: clamp(13px, 0.9vw, 17px);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+}
+
+.range-description-row span:first-child {
+    text-align: left;
+}
+
+.range-description-row span:nth-child(2) {
+    text-align: center;
+}
+
+.range-description-row span:last-child {
+    text-align: right;
+}
+
+.range-slider:focus-visible {
+    outline:
+        3px solid
+        rgba(77, 181, 251, 0.75);
+
+    outline-offset: 8px;
+}
+
+.range-option:focus-visible {
+    outline:
+        2px solid
+        rgba(77, 181, 251, 0.85);
+
+    outline-offset: 4px;
+    border-radius: 7px;
+}
+
+/* Q3는 양 끝 설명만 표시합니다. */
+.aim-label-row {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    color: rgba(255, 255, 255, 0.78);
-    background: rgba(10, 18, 32, 0.70);
+    grid-template-columns: none;
+}
 
-    border:
-        2px dashed
-        rgba(255, 255, 255, 0.28);
+.aim-label-row .aim-option:first-child {
+    justify-self: auto;
+    text-align: left;
+}
 
-    border-radius: 14px;
-
-    font-size: clamp(28px, 2vw, 40px);
-    font-weight: 800;
+.aim-label-row .aim-option:last-child {
+    justify-self: auto;
+    text-align: right;
 }
 
 /* ========================================================
@@ -1754,6 +2036,7 @@ export default function(component) {
     const questions = {
         1: parentElement.querySelector("#question-1"),
         2: parentElement.querySelector("#question-2"),
+        3: parentElement.querySelector("#question-3"),
     };
 
     const homeButton = parentElement.querySelector("#home-button");
@@ -1765,6 +2048,24 @@ export default function(component) {
 
     const roleCards = Array.from(
         parentElement.querySelectorAll(".role-card")
+    );
+
+    const rangeSlider =
+        parentElement.querySelector("#range-slider");
+
+    const rangeOptions = Array.from(
+        parentElement.querySelectorAll(
+            "#question-2 .range-option"
+        )
+    );
+
+    const aimSlider =
+        parentElement.querySelector("#aim-slider");
+
+    const aimOptions = Array.from(
+        parentElement.querySelectorAll(
+            "#question-3 .aim-option"
+        )
     );
 
     const progressDots = Array.from(
@@ -1785,10 +2086,16 @@ export default function(component) {
         currentQuestion: 1,
         answers: {
             role: null,
+            range: null,
+            aim: null,
         },
         isQuestionAnimating: false,
     };
     app.__owState = state;
+
+    // 기존 상태 객체에 새 질문 값이 없을 때를 대비합니다.
+    state.answers.range ??= null;
+    state.answers.aim ??= null;
 
     function clearAnimationClass(element, className, timeout = 900) {
         window.setTimeout(() => {
@@ -1848,12 +2155,16 @@ export default function(component) {
     function resetQuiz() {
         state.currentQuestion = 1;
         state.answers.role = null;
+        state.answers.range = null;
+        state.answers.aim = null;
 
         roleCards.forEach((card) => {
             card.classList.remove("selected");
             card.setAttribute("aria-checked", "false");
         });
 
+        updateRangeUI();
+        updateAimUI();
         setQuestionInstantly(1);
         updateQuizUI();
     }
@@ -1883,7 +2194,6 @@ export default function(component) {
         state.currentQuestion = questionNumber;
     }
 
-
     function moveQuestion(nextQuestion, direction) {
         if (
             state.isQuestionAnimating
@@ -1911,26 +2221,14 @@ export default function(component) {
                 ? "enter-from-right"
                 : "enter-from-left";
 
-        /*
-        전환 시간 설정
-
-        1. 기존 패널이 280ms 동안 먼저 사라잠
-        2. 230ms가 지난 시점에 다음 패널이 등장하기 시작
-        3. 두 패널이 겹치는 시간은 약 50ms이지만,기존 패널이 거의 투명해진 상태라 자연스럽게 보임
-        */
-        const enterDelay = 155;
-        const enterDuration = 150;
+        // 기존 패널이 거의 사라진 뒤 새 패널을 등장시킵니다.
+        const enterDelay = 330;
+        const enterDuration = 420;
         const cleanupBuffer = 30;
 
-        /*
-        기존 질문 패널 퇴장
-        */
         currentPanel.classList.remove("active");
         currentPanel.classList.add(leavingClass);
 
-        /*
-        다음 질문 패널에 이전 애니메이션 클래스가 남아 있지 않도록 먼저 정리.
-        */
         nextPanel.classList.remove(
             "active",
             "leave-to-left",
@@ -1939,25 +2237,13 @@ export default function(component) {
             "enter-from-right"
         );
 
-        /*
-        기존 화면이 거의 사라진 후 다음 질문 패널의 등장 애니메이션을 시작
-        */
         window.setTimeout(() => {
             nextPanel.classList.add(enteringClass);
         }, enterDelay);
 
-        /*
-        전체 전환이 끝난 후 클래스와 상태를 정리
-        */
         window.setTimeout(() => {
-            currentPanel.classList.remove(
-                leavingClass
-            );
-
-            nextPanel.classList.remove(
-                enteringClass
-            );
-
+            currentPanel.classList.remove(leavingClass);
+            nextPanel.classList.remove(enteringClass);
             nextPanel.classList.add("active");
 
             state.currentQuestion = nextQuestion;
@@ -1966,8 +2252,6 @@ export default function(component) {
             updateQuizUI();
         }, enterDelay + enterDuration + cleanupBuffer);
     }
-
-
 
     function setArrowContent(
         button,
@@ -2028,9 +2312,15 @@ export default function(component) {
                 return;
             }
 
+            const completedQuestions = {
+                1: state.answers.role !== null,
+                2: state.answers.range !== null,
+                3: state.answers.aim !== null,
+            };
+
             const isCompleted =
-                questionNumber === 1
-                && state.answers.role !== null;
+                completedQuestions[questionNumber]
+                ?? false;
 
             dot.classList.add(
                 isCompleted
@@ -2044,10 +2334,22 @@ export default function(component) {
         const previousEnabled =
             state.currentQuestion > 1;
 
-        const nextEnabled =
-            state.currentQuestion === 1
-                ? state.answers.role !== null
-                : false;
+        let nextEnabled = false;
+
+        if (state.currentQuestion === 1) {
+            nextEnabled =
+                state.answers.role !== null;
+        }
+
+        if (state.currentQuestion === 2) {
+            nextEnabled =
+                state.answers.range !== null;
+        }
+
+        // Q4가 아직 없으므로 Q3의 다음 버튼은 비활성화합니다.
+        if (state.currentQuestion === 3) {
+            nextEnabled = false;
+        }
 
         setArrowContent(
             previousButton,
@@ -2089,7 +2391,126 @@ export default function(component) {
         updateQuizUI();
     }
 
+    function getRangeLabel(value) {
+        const labels = {
+            1: "단거리",
+            3: "중거리",
+            5: "장거리",
+        };
+
+        return labels[value] ?? "선택하지 않음";
+    }
+
+    function updateRangeUI() {
+        const displayValue =
+            state.answers.range ?? 3;
+
+        rangeSlider.value =
+            String(displayValue);
+
+        rangeSlider.setAttribute(
+            "aria-valuetext",
+            state.answers.range === null
+                ? "선택하지 않음"
+                : getRangeLabel(displayValue)
+        );
+
+        rangeOptions.forEach((option) => {
+            const optionValue =
+                Number(option.dataset.range);
+
+            const isSelected =
+                state.answers.range === optionValue;
+
+            option.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            option.setAttribute(
+                "aria-pressed",
+                String(isSelected)
+            );
+        });
+    }
+
+    function selectRange(value) {
+        const numericValue = Number(value);
+        const validValues = [1, 3, 5];
+
+        if (!validValues.includes(numericValue)) {
+            return;
+        }
+
+        state.answers.range = numericValue;
+        updateRangeUI();
+        updateQuizUI();
+    }
+
+    function getAimLabel(value) {
+        const labels = {
+            1: "조준 부담 적음",
+            2: "조준 자신감 낮음",
+            3: "보통",
+            4: "조준 자신감 높음",
+            5: "정밀 조준 필요",
+        };
+
+        return labels[value] ?? "선택하지 않음";
+    }
+
+    function updateAimUI() {
+        const displayValue =
+            state.answers.aim ?? 3;
+
+        aimSlider.value =
+            String(displayValue);
+
+        aimSlider.setAttribute(
+            "aria-valuetext",
+            state.answers.aim === null
+                ? "선택하지 않음"
+                : getAimLabel(displayValue)
+        );
+
+        aimOptions.forEach((option) => {
+            const optionValue =
+                Number(option.dataset.aim);
+
+            const isSelected =
+                state.answers.aim === optionValue;
+
+            option.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            option.setAttribute(
+                "aria-pressed",
+                String(isSelected)
+            );
+        });
+    }
+
+    function selectAim(value) {
+        const numericValue = Number(value);
+        const validValues = [1, 2, 3, 4, 5];
+
+        if (!validValues.includes(numericValue)) {
+            return;
+        }
+
+        state.answers.aim = numericValue;
+        updateAimUI();
+        updateQuizUI();
+    }
+
     function handlePrevious() {
+        if (state.currentQuestion === 3) {
+            moveQuestion(2, "backward");
+            return;
+        }
+
         if (state.currentQuestion === 2) {
             moveQuestion(1, "backward");
         }
@@ -2101,6 +2522,14 @@ export default function(component) {
             && state.answers.role !== null
         ) {
             moveQuestion(2, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 2
+            && state.answers.range !== null
+        ) {
+            moveQuestion(3, "forward");
         }
     }
 
@@ -2145,6 +2574,39 @@ export default function(component) {
 
         if (button.classList.contains("role-card")) {
             selectRole(button);
+            return;
+        }
+
+        if (
+            button.classList.contains("range-option")
+            && button.dataset.range
+        ) {
+            selectRange(button.dataset.range);
+            return;
+        }
+
+        if (button.classList.contains("aim-option")) {
+            selectAim(button.dataset.aim);
+        }
+    }
+
+    function handleAppInput(event) {
+        const target =
+            event.target instanceof HTMLInputElement
+                ? event.target
+                : null;
+
+        if (!target) {
+            return;
+        }
+
+        if (target === rangeSlider) {
+            selectRange(target.value);
+            return;
+        }
+
+        if (target === aimSlider) {
+            selectAim(target.value);
         }
     }
 
@@ -2153,6 +2615,12 @@ export default function(component) {
     app.addEventListener(
         "click",
         handleAppClick,
+        { signal: abortController.signal }
+    );
+
+    app.addEventListener(
+        "input",
+        handleAppInput,
         { signal: abortController.signal }
     );
 
@@ -2175,6 +2643,8 @@ export default function(component) {
         card.setAttribute("aria-checked", String(isSelected));
     });
 
+    updateRangeUI();
+    updateAimUI();
     updateQuizUI();
 
     return () => {
