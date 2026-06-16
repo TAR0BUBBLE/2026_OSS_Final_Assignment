@@ -1,0 +1,171 @@
+{
+  "metadata": {
+    "title": "Streamlit 추천 질문 정의",
+    "answer_schema": {
+      "role": "tank | damage | support | flex",
+      "range": "1 | 3 | 5",
+      "aim": "1~5",
+      "mobility": "1~5",
+      "aggression": "1~5",
+      "position": "frontline | midline | backline | flank | flexible",
+      "priority": "damage | survival | protection | healing | control | easy",
+      "experience": "beginner | intermediate | advanced"
+    }
+  },
+  "questions": [
+    {
+      "id": "role",
+      "label": "가장 해보고 싶은 역할은 무엇인가요?",
+      "widget": "radio",
+      "options": [
+        {
+          "label": "돌격: 팀의 앞에서 공간을 만들고 싶어요",
+          "value": "tank"
+        },
+        {
+          "label": "공격: 직접 적을 처치하고 싶어요",
+          "value": "damage"
+        },
+        {
+          "label": "지원: 아군을 살리고 보조하고 싶어요",
+          "value": "support"
+        },
+        {
+          "label": "아직 모르겠어요",
+          "value": "flex"
+        }
+      ]
+    },
+    {
+      "id": "range",
+      "label": "어떤 거리에서 싸우는 것이 편한가요?",
+      "widget": "select_slider",
+      "options": [
+        {
+          "label": "근거리",
+          "value": 1
+        },
+        {
+          "label": "중거리",
+          "value": 3
+        },
+        {
+          "label": "장거리",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "aim",
+      "label": "정확한 조준에 얼마나 자신 있나요?",
+      "widget": "slider",
+      "min": 1,
+      "max": 5,
+      "default": 3,
+      "help": "1은 조준 부담이 적은 영웅 선호, 5는 정밀 조준 영웅 선호"
+    },
+    {
+      "id": "mobility",
+      "label": "빠르게 이동하고 재배치하는 플레이를 좋아하나요?",
+      "widget": "slider",
+      "min": 1,
+      "max": 5,
+      "default": 3
+    },
+    {
+      "id": "aggression",
+      "label": "얼마나 적극적으로 적에게 진입하고 싶나요?",
+      "widget": "slider",
+      "min": 1,
+      "max": 5,
+      "default": 3
+    },
+    {
+      "id": "position",
+      "label": "한타에서 선호하는 위치는 어디인가요?",
+      "widget": "radio",
+      "options": [
+        {
+          "label": "최전방",
+          "value": "frontline"
+        },
+        {
+          "label": "중간 전선",
+          "value": "midline"
+        },
+        {
+          "label": "후방",
+          "value": "backline"
+        },
+        {
+          "label": "측면·적 후방",
+          "value": "flank"
+        },
+        {
+          "label": "상황에 따라 달라요",
+          "value": "flexible"
+        }
+      ]
+    },
+    {
+      "id": "priority",
+      "label": "영웅을 고를 때 가장 중요하게 생각하는 요소는 무엇인가요?",
+      "widget": "radio",
+      "options": [
+        {
+          "label": "높은 공격력",
+          "value": "damage"
+        },
+        {
+          "label": "튼튼한 생존력",
+          "value": "survival"
+        },
+        {
+          "label": "아군 보호와 구조",
+          "value": "protection"
+        },
+        {
+          "label": "강력한 치유",
+          "value": "healing"
+        },
+        {
+          "label": "적 방해와 전장 제어",
+          "value": "control"
+        },
+        {
+          "label": "쉬운 조작과 입문 난이도",
+          "value": "easy"
+        }
+      ]
+    },
+    {
+      "id": "experience",
+      "label": "FPS 또는 오버워치 경험은 어느 정도인가요?",
+      "widget": "radio",
+      "options": [
+        {
+          "label": "입문자",
+          "value": "beginner"
+        },
+        {
+          "label": "중급자",
+          "value": "intermediate"
+        },
+        {
+          "label": "숙련자",
+          "value": "advanced"
+        }
+      ]
+    }
+  ],
+  "sample_answer": {
+    "role": "damage",
+    "range": 1,
+    "aim": 2,
+    "mobility": 5,
+    "aggression": 5,
+    "position": "flank",
+    "priority": "easy",
+    "experience": "beginner"
+  }
+}

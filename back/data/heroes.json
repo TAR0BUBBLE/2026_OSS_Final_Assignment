@@ -1,0 +1,1574 @@
+{
+  "metadata": {
+    "title": "오버워치 영웅 추천용 정적 데이터셋",
+    "version": "1.0.0",
+    "roster_checked_at": "2026-06-16",
+    "hero_count": 50,
+    "role_counts": {
+      "tank": 14,
+      "damage": 22,
+      "support": 14
+    },
+    "score_scale": "각 특성은 1~5점입니다. 1은 매우 낮음, 5는 매우 높음을 뜻합니다.",
+    "important_note": "영웅 이름·역할·공식 세부 역할은 블리자드 공식 자료를 바탕으로 했습니다. 수치형 특성 점수와 요약은 수업 프로젝트용 추천 로직을 위해 설계한 자체 데이터이며 공식 티어·통계가 아닙니다.",
+    "official_sources": [
+      "https://overwatch.blizzard.com/ko-kr/heroes/",
+      "https://overwatch.blizzard.com/en-us/news/24243646/weekly-recall-sub-role-call/"
+    ],
+    "null_subrole_note": "2026-02-20 공식 세부 역할 소개 글에서 시그마, 시메트라, 토르비욘의 이름이 분류 목록에 포함되지 않아 official_subrole을 null로 두었습니다."
+  },
+  "score_definitions": {
+    "range": "선호 교전 거리: 1 근거리, 3 중거리, 5 장거리",
+    "aim": "정확한 조준 요구도",
+    "mobility": "이동기와 재배치 능력",
+    "aggression": "적극적인 진입과 교전 성향",
+    "damage": "직접 피해 잠재력",
+    "durability": "스스로 버티는 능력",
+    "protection": "아군을 보호하거나 구조하는 능력",
+    "healing": "아군 치유 능력",
+    "control": "밀쳐내기·구속·벽·해킹 등 전장 제어 능력",
+    "complexity": "운영과 숙련 난이도",
+    "beginner_friendly": "초보자가 쉽게 성과를 내기 좋은 정도"
+  },
+  "heroes": [
+    {
+      "id": "dva",
+      "name_en": "D.Va",
+      "name_ko": "D.Va",
+      "role": "tank",
+      "official_subrole": "Initiator",
+      "positions": [
+        "frontline",
+        "flank"
+      ],
+      "tags": [
+        "dive",
+        "peel",
+        "projectile-defense"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 4,
+        "durability": 4,
+        "protection": 4,
+        "healing": 1,
+        "control": 3,
+        "complexity": 4,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "높은 기동성으로 적 후방을 압박하고 방어 매트릭스로 아군을 지키는 다이브 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/dva/"
+    },
+    {
+      "id": "doomfist",
+      "name_en": "Doomfist",
+      "name_ko": "둠피스트",
+      "role": "tank",
+      "official_subrole": "Initiator",
+      "positions": [
+        "frontline",
+        "flank"
+      ],
+      "tags": [
+        "dive",
+        "disruption",
+        "combo"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 3,
+        "protection": 1,
+        "healing": 1,
+        "control": 5,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "연속 기동기와 밀쳐내기를 활용해 적 진형을 붕괴시키는 고난도 다이브 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/doomfist/"
+    },
+    {
+      "id": "domina",
+      "name_en": "Domina",
+      "name_ko": "도미나",
+      "role": "tank",
+      "official_subrole": "Stalwart",
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "anchor",
+        "barrier",
+        "control"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 3,
+        "mobility": 1,
+        "aggression": 3,
+        "damage": 3,
+        "durability": 5,
+        "protection": 5,
+        "healing": 1,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "분할 방벽과 밀쳐내기, 가두기 능력으로 전장을 통제하는 수비형 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/domina/"
+    },
+    {
+      "id": "hazard",
+      "name_en": "Hazard",
+      "name_ko": "해저드",
+      "role": "tank",
+      "official_subrole": "Stalwart",
+      "positions": [
+        "frontline",
+        "flank"
+      ],
+      "tags": [
+        "brawl",
+        "dive",
+        "terrain-control"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 2,
+        "mobility": 4,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 4,
+        "protection": 2,
+        "healing": 1,
+        "control": 4,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "벽 생성과 도약을 이용해 근거리에서 거칠게 진입하는 난전형 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/hazard/"
+    },
+    {
+      "id": "junker-queen",
+      "name_en": "Junker Queen",
+      "name_ko": "정커퀸",
+      "role": "tank",
+      "official_subrole": "Stalwart",
+      "positions": [
+        "frontline"
+      ],
+      "tags": [
+        "brawl",
+        "sustain",
+        "team-buff"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 3,
+        "aggression": 5,
+        "damage": 5,
+        "durability": 4,
+        "protection": 3,
+        "healing": 1,
+        "control": 3,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "상처 피해와 지휘의 외침을 활용해 팀을 이끌며 근접 난전을 벌이는 공격형 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/junker-queen/"
+    },
+    {
+      "id": "mauga",
+      "name_en": "Mauga",
+      "name_ko": "마우가",
+      "role": "tank",
+      "official_subrole": "Bruiser",
+      "positions": [
+        "frontline"
+      ],
+      "tags": [
+        "brawl",
+        "sustained-damage",
+        "self-sustain"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 2,
+        "mobility": 2,
+        "aggression": 5,
+        "damage": 5,
+        "durability": 5,
+        "protection": 2,
+        "healing": 1,
+        "control": 2,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "두 기관포와 높은 자가 생존력으로 정면에서 지속 화력을 퍼붓는 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/mauga/"
+    },
+    {
+      "id": "orisa",
+      "name_en": "Orisa",
+      "name_ko": "오리사",
+      "role": "tank",
+      "official_subrole": "Bruiser",
+      "positions": [
+        "frontline"
+      ],
+      "tags": [
+        "anchor",
+        "anti-dive",
+        "disruption"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 3,
+        "mobility": 1,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 5,
+        "protection": 4,
+        "healing": 1,
+        "control": 4,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "높은 내구도와 투창으로 전선을 단단하게 유지하는 안정적인 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/orisa/"
+    },
+    {
+      "id": "ramattra",
+      "name_en": "Ramattra",
+      "name_ko": "라마트라",
+      "role": "tank",
+      "official_subrole": "Stalwart",
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "tempo",
+        "brawl",
+        "barrier"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 2,
+        "mobility": 2,
+        "aggression": 4,
+        "damage": 4,
+        "durability": 5,
+        "protection": 4,
+        "healing": 1,
+        "control": 4,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "원거리 견제와 근거리 난전을 형태 전환으로 오가는 유연한 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/ramattra/"
+    },
+    {
+      "id": "reinhardt",
+      "name_en": "Reinhardt",
+      "name_ko": "라인하르트",
+      "role": "tank",
+      "official_subrole": "Stalwart",
+      "positions": [
+        "frontline"
+      ],
+      "tags": [
+        "anchor",
+        "barrier",
+        "brawl"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 1,
+        "mobility": 2,
+        "aggression": 4,
+        "damage": 4,
+        "durability": 5,
+        "protection": 5,
+        "healing": 1,
+        "control": 4,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "대형 방벽으로 팀을 보호하고 망치로 전선을 밀어붙이는 대표적인 근접 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/reinhardt/"
+    },
+    {
+      "id": "roadhog",
+      "name_en": "Roadhog",
+      "name_ko": "로드호그",
+      "role": "tank",
+      "official_subrole": "Bruiser",
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "pick",
+        "self-sustain",
+        "brawl"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 4,
+        "mobility": 1,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 5,
+        "protection": 1,
+        "healing": 1,
+        "control": 5,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "갈고리로 적 한 명을 끌어와 처치하고 스스로 버티는 픽 중심 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/roadhog/"
+    },
+    {
+      "id": "sigma",
+      "name_en": "Sigma",
+      "name_ko": "시그마",
+      "role": "tank",
+      "official_subrole": null,
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "poke",
+        "barrier",
+        "control"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 1,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 5,
+        "protection": 5,
+        "healing": 1,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "가변 방벽과 투사체 흡수, 원거리 제어기로 전선을 운영하는 포킹형 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/sigma/"
+    },
+    {
+      "id": "winston",
+      "name_en": "Winston",
+      "name_ko": "윈스턴",
+      "role": "tank",
+      "official_subrole": "Initiator",
+      "positions": [
+        "frontline",
+        "flank"
+      ],
+      "tags": [
+        "dive",
+        "barrier",
+        "cleave"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 1,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 3,
+        "durability": 4,
+        "protection": 3,
+        "healing": 1,
+        "control": 2,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "도약으로 후방에 진입해 여러 적을 동시에 압박하는 입문 친화적 다이브 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/winston/"
+    },
+    {
+      "id": "wrecking-ball",
+      "name_en": "Wrecking Ball",
+      "name_ko": "레킹볼",
+      "role": "tank",
+      "official_subrole": "Initiator",
+      "positions": [
+        "flank",
+        "frontline"
+      ],
+      "tags": [
+        "dive",
+        "disruption",
+        "mobility"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 4,
+        "protection": 1,
+        "healing": 1,
+        "control": 5,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "압도적인 이동력으로 적을 흩뜨리고 끊임없이 교란하는 최고난도 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/wrecking-ball/"
+    },
+    {
+      "id": "zarya",
+      "name_en": "Zarya",
+      "name_ko": "자리야",
+      "role": "tank",
+      "official_subrole": "Bruiser",
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "brawl",
+        "peel",
+        "charge-management"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 1,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 5,
+        "protection": 5,
+        "healing": 1,
+        "control": 4,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "방벽으로 자신과 아군을 보호하며 에너지를 모아 강해지는 운영형 돌격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/zarya/"
+    },
+    {
+      "id": "anran",
+      "name_en": "Anran",
+      "name_ko": "안란",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "flank",
+        "midline"
+      ],
+      "tags": [
+        "flank",
+        "burn",
+        "mobility"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 3,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "불꽃 공격과 연속 돌진으로 적진을 휘젓는 고기동 근중거리 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/anran/"
+    },
+    {
+      "id": "ashe",
+      "name_en": "Ashe",
+      "name_ko": "애쉬",
+      "role": "damage",
+      "official_subrole": "Sharpshooter",
+      "positions": [
+        "backline",
+        "midline"
+      ],
+      "tags": [
+        "hitscan",
+        "poke",
+        "burst"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 5,
+        "mobility": 2,
+        "aggression": 3,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "정확한 조준과 다이너마이트로 중장거리에서 폭발적인 피해를 내는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/ashe/"
+    },
+    {
+      "id": "bastion",
+      "name_en": "Bastion",
+      "name_ko": "바스티온",
+      "role": "damage",
+      "official_subrole": "Specialist",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "sustained-damage",
+        "anti-tank",
+        "anchor"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 2,
+        "mobility": 1,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 4,
+        "protection": 1,
+        "healing": 1,
+        "control": 1,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "단순한 조작과 강력한 지속 화력으로 전선을 압박하는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/bastion/"
+    },
+    {
+      "id": "cassidy",
+      "name_en": "Cassidy",
+      "name_ko": "캐서디",
+      "role": "damage",
+      "official_subrole": "Sharpshooter",
+      "positions": [
+        "midline"
+      ],
+      "tags": [
+        "hitscan",
+        "duelist",
+        "anti-flank"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 5,
+        "mobility": 2,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 3,
+        "protection": 1,
+        "healing": 1,
+        "control": 3,
+        "complexity": 3,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "정확한 리볼버 사격으로 중거리 교전과 근접 대응에 강한 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/cassidy/"
+    },
+    {
+      "id": "echo",
+      "name_en": "Echo",
+      "name_ko": "에코",
+      "role": "damage",
+      "official_subrole": "Recon",
+      "positions": [
+        "flank",
+        "midline"
+      ],
+      "tags": [
+        "flight",
+        "burst",
+        "finisher"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "비행과 연계 공격으로 약해진 적을 마무리하는 고난도 공중 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/echo/"
+    },
+    {
+      "id": "emre",
+      "name_en": "Emre",
+      "name_ko": "엠레",
+      "role": "damage",
+      "official_subrole": "Specialist",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "burst-rifle",
+        "grenade",
+        "transformation"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 2,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 3,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "점사 소총과 수류탄을 활용해 중장거리에서 안정적으로 화력을 내는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/emre/"
+    },
+    {
+      "id": "freja",
+      "name_en": "Freja",
+      "name_ko": "프레야",
+      "role": "damage",
+      "official_subrole": "Recon",
+      "positions": [
+        "backline",
+        "flank"
+      ],
+      "tags": [
+        "projectile",
+        "mobility",
+        "burst"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 5,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 4,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "정밀한 폭발 화살과 공중 기동을 결합한 높은 숙련도의 원거리 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/freja/"
+    },
+    {
+      "id": "genji",
+      "name_en": "Genji",
+      "name_ko": "겐지",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "flank"
+      ],
+      "tags": [
+        "flank",
+        "reset",
+        "deflect"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 4,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 1,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "벽타기와 질풍참으로 적 후방을 노리고 처치 연계를 만드는 고난도 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/genji/"
+    },
+    {
+      "id": "hanzo",
+      "name_en": "Hanzo",
+      "name_ko": "한조",
+      "role": "damage",
+      "official_subrole": "Sharpshooter",
+      "positions": [
+        "backline",
+        "midline"
+      ],
+      "tags": [
+        "projectile",
+        "sniper",
+        "burst"
+      ],
+      "scores": {
+        "range": 5,
+        "aim": 5,
+        "mobility": 3,
+        "aggression": 3,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 4,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "활의 높은 순간 피해로 장거리에서 적을 위협하는 투사체 저격 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/hanzo/"
+    },
+    {
+      "id": "junkrat",
+      "name_en": "Junkrat",
+      "name_ko": "정크랫",
+      "role": "damage",
+      "official_subrole": "Specialist",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "spam",
+        "area-denial",
+        "trap"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 2,
+        "mobility": 3,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 3,
+        "protection": 1,
+        "healing": 1,
+        "control": 4,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "유탄과 덫으로 좁은 길목을 장악하며 손쉽게 광역 피해를 누적하는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/junkrat/"
+    },
+    {
+      "id": "mei",
+      "name_en": "Mei",
+      "name_ko": "메이",
+      "role": "damage",
+      "official_subrole": "Specialist",
+      "positions": [
+        "frontline",
+        "midline"
+      ],
+      "tags": [
+        "control",
+        "wall",
+        "survival"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 2,
+        "mobility": 2,
+        "aggression": 3,
+        "damage": 3,
+        "durability": 4,
+        "protection": 3,
+        "healing": 1,
+        "control": 5,
+        "complexity": 3,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "빙벽과 둔화로 적의 이동을 제한하고 교전 구도를 바꾸는 제어형 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/mei/"
+    },
+    {
+      "id": "pharah",
+      "name_en": "Pharah",
+      "name_ko": "파라",
+      "role": "damage",
+      "official_subrole": "Recon",
+      "positions": [
+        "midline",
+        "flank"
+      ],
+      "tags": [
+        "flight",
+        "splash",
+        "poke"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "공중에서 로켓의 광역 피해를 퍼붓는 직관적인 비행 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/pharah/"
+    },
+    {
+      "id": "reaper",
+      "name_en": "Reaper",
+      "name_ko": "리퍼",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "flank",
+        "frontline"
+      ],
+      "tags": [
+        "flank",
+        "brawl",
+        "self-sustain"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 2,
+        "mobility": 4,
+        "aggression": 5,
+        "damage": 5,
+        "durability": 4,
+        "protection": 1,
+        "healing": 1,
+        "control": 1,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "산탄총과 생명력 흡수로 근거리에서 강하게 버티며 적 후방을 습격하는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/reaper/"
+    },
+    {
+      "id": "sojourn",
+      "name_en": "Sojourn",
+      "name_ko": "소전",
+      "role": "damage",
+      "official_subrole": "Sharpshooter",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "hitscan",
+        "railgun",
+        "mobility"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 5,
+        "mobility": 4,
+        "aggression": 4,
+        "damage": 5,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "연사 무기로 에너지를 모아 정밀한 레일건 결정타를 만드는 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/sojourn/"
+    },
+    {
+      "id": "soldier-76",
+      "name_en": "Soldier: 76",
+      "name_ko": "솔저: 76",
+      "role": "damage",
+      "official_subrole": "Specialist",
+      "positions": [
+        "midline",
+        "flank"
+      ],
+      "tags": [
+        "hitscan",
+        "sustain",
+        "self-heal"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 3,
+        "mobility": 3,
+        "aggression": 4,
+        "damage": 4,
+        "durability": 3,
+        "protection": 1,
+        "healing": 2,
+        "control": 1,
+        "complexity": 2,
+        "beginner_friendly": 5
+      },
+      "summary_ko": "소총, 질주, 자가 치유를 갖춘 가장 표준적이고 입문하기 쉬운 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/soldier-76/"
+    },
+    {
+      "id": "sombra",
+      "name_en": "Sombra",
+      "name_ko": "솜브라",
+      "role": "damage",
+      "official_subrole": "Recon",
+      "positions": [
+        "flank"
+      ],
+      "tags": [
+        "stealth",
+        "hack",
+        "disruption"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 4,
+        "damage": 3,
+        "durability": 2,
+        "protection": 1,
+        "healing": 1,
+        "control": 5,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "은신과 해킹으로 적의 핵심 능력을 차단하고 정보를 만드는 전략형 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/sombra/"
+    },
+    {
+      "id": "symmetra",
+      "name_en": "Symmetra",
+      "name_ko": "시메트라",
+      "role": "damage",
+      "official_subrole": null,
+      "positions": [
+        "midline",
+        "frontline"
+      ],
+      "tags": [
+        "beam",
+        "teleporter",
+        "area-control"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 1,
+        "mobility": 2,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 3,
+        "protection": 4,
+        "healing": 1,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "감시 포탑과 순간이동기로 공간을 설계하고 근거리 화력을 키우는 제어형 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/symmetra/"
+    },
+    {
+      "id": "torbjorn",
+      "name_en": "Torbjörn",
+      "name_ko": "토르비욘",
+      "role": "damage",
+      "official_subrole": null,
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "turret",
+        "area-denial",
+        "anti-flank"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 3,
+        "mobility": 1,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 4,
+        "protection": 2,
+        "healing": 1,
+        "control": 4,
+        "complexity": 2,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "자동 포탑과 과부하로 거점을 안정적으로 지키는 수비적인 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/torbjorn/"
+    },
+    {
+      "id": "tracer",
+      "name_en": "Tracer",
+      "name_ko": "트레이서",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "flank"
+      ],
+      "tags": [
+        "flank",
+        "mobility",
+        "duelist"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 4,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 1,
+        "protection": 1,
+        "healing": 1,
+        "control": 1,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "점멸과 시간 역행으로 적 후방을 끊임없이 흔드는 최고기동 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/tracer/"
+    },
+    {
+      "id": "venture",
+      "name_en": "Venture",
+      "name_ko": "벤처",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "flank",
+        "frontline"
+      ],
+      "tags": [
+        "brawl",
+        "burrow",
+        "disruption"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 2,
+        "mobility": 4,
+        "aggression": 5,
+        "damage": 4,
+        "durability": 4,
+        "protection": 1,
+        "healing": 1,
+        "control": 3,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "땅속 이동과 드릴 돌진으로 근접 난전을 벌이는 생존력 높은 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/venture/"
+    },
+    {
+      "id": "vendetta",
+      "name_en": "Vendetta",
+      "name_ko": "벤데타",
+      "role": "damage",
+      "official_subrole": "Flanker",
+      "positions": [
+        "frontline",
+        "flank"
+      ],
+      "tags": [
+        "melee",
+        "mobility",
+        "block"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 1,
+        "mobility": 5,
+        "aggression": 5,
+        "damage": 5,
+        "durability": 4,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "대검의 연속 공격과 돌진, 방어 자세를 활용하는 근접 전투형 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/vendetta/"
+    },
+    {
+      "id": "widowmaker",
+      "name_en": "Widowmaker",
+      "name_ko": "위도우메이커",
+      "role": "damage",
+      "official_subrole": "Sharpshooter",
+      "positions": [
+        "backline"
+      ],
+      "tags": [
+        "hitscan",
+        "sniper",
+        "pick"
+      ],
+      "scores": {
+        "range": 5,
+        "aim": 5,
+        "mobility": 2,
+        "aggression": 2,
+        "damage": 5,
+        "durability": 1,
+        "protection": 1,
+        "healing": 1,
+        "control": 2,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "극도의 조준 실력으로 장거리에서 한 번에 적을 제거하는 정통 저격 공격 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/widowmaker/"
+    },
+    {
+      "id": "ana",
+      "name_en": "Ana",
+      "name_ko": "아나",
+      "role": "support",
+      "official_subrole": "Tactician",
+      "positions": [
+        "backline"
+      ],
+      "tags": [
+        "sniper-healer",
+        "utility",
+        "anti-heal"
+      ],
+      "scores": {
+        "range": 5,
+        "aim": 5,
+        "mobility": 1,
+        "aggression": 2,
+        "damage": 3,
+        "durability": 2,
+        "protection": 2,
+        "healing": 5,
+        "control": 5,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "저격 치유와 수면총, 생체 수류탄으로 전투를 설계하는 고난도 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/ana/"
+    },
+    {
+      "id": "baptiste",
+      "name_en": "Baptiste",
+      "name_ko": "바티스트",
+      "role": "support",
+      "official_subrole": "Tactician",
+      "positions": [
+        "backline",
+        "midline"
+      ],
+      "tags": [
+        "hitscan",
+        "burst-heal",
+        "save"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 3,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 3,
+        "protection": 4,
+        "healing": 5,
+        "control": 3,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "공격과 광역 치유를 병행하고 불사 장치로 아군을 살리는 만능형 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/baptiste/"
+    },
+    {
+      "id": "brigitte",
+      "name_en": "Brigitte",
+      "name_ko": "브리기테",
+      "role": "support",
+      "official_subrole": "Survivor",
+      "positions": [
+        "midline",
+        "frontline"
+      ],
+      "tags": [
+        "peel",
+        "brawl",
+        "anti-dive"
+      ],
+      "scores": {
+        "range": 1,
+        "aim": 1,
+        "mobility": 2,
+        "aggression": 3,
+        "damage": 2,
+        "durability": 4,
+        "protection": 5,
+        "healing": 4,
+        "control": 5,
+        "complexity": 3,
+        "beginner_friendly": 4
+      },
+      "summary_ko": "방패와 밀쳐내기로 아군 후방을 보호하며 근접 전투로 치유하는 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/brigitte/"
+    },
+    {
+      "id": "illari",
+      "name_en": "Illari",
+      "name_ko": "일리아리",
+      "role": "support",
+      "official_subrole": "Survivor",
+      "positions": [
+        "backline",
+        "midline"
+      ],
+      "tags": [
+        "hitscan",
+        "healing-pylon",
+        "burst"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 3,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 3,
+        "protection": 3,
+        "healing": 5,
+        "control": 2,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "치유 포탑으로 아군을 지원하면서 정밀한 태양 소총으로 피해를 내는 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/illari/"
+    },
+    {
+      "id": "jetpack-cat",
+      "name_en": "Jetpack Cat",
+      "name_ko": "제트팩 캣",
+      "role": "support",
+      "official_subrole": "Tactician",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "flight",
+        "transport",
+        "area-heal"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 2,
+        "mobility": 5,
+        "aggression": 2,
+        "damage": 2,
+        "durability": 3,
+        "protection": 5,
+        "healing": 5,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "비행하며 아군을 견인하고 광역 치유와 적 구속을 제공하는 기동형 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/jetpack-cat/"
+    },
+    {
+      "id": "juno",
+      "name_en": "Juno",
+      "name_ko": "주노",
+      "role": "support",
+      "official_subrole": "Survivor",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "mobility",
+        "speed-boost",
+        "hybrid-heal"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 2,
+        "damage": 3,
+        "durability": 2,
+        "protection": 4,
+        "healing": 5,
+        "control": 3,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "높은 기동성과 속도 지원으로 팀 전체의 템포를 끌어올리는 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/juno/"
+    },
+    {
+      "id": "kiriko",
+      "name_en": "Kiriko",
+      "name_ko": "키리코",
+      "role": "support",
+      "official_subrole": "Medic",
+      "positions": [
+        "backline",
+        "flank"
+      ],
+      "tags": [
+        "cleanse",
+        "teleport",
+        "burst"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 5,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 3,
+        "protection": 5,
+        "healing": 5,
+        "control": 4,
+        "complexity": 5,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "순간이동과 정화 방울로 위기 대응에 뛰어나며 치명타 잠재력도 높은 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/kiriko/"
+    },
+    {
+      "id": "lifeweaver",
+      "name_en": "Lifeweaver",
+      "name_ko": "라이프위버",
+      "role": "support",
+      "official_subrole": "Medic",
+      "positions": [
+        "backline"
+      ],
+      "tags": [
+        "rescue",
+        "positioning",
+        "sustain-heal"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 2,
+        "mobility": 3,
+        "aggression": 1,
+        "damage": 2,
+        "durability": 3,
+        "protection": 5,
+        "healing": 5,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "구원의 손길과 연꽃 단상으로 아군의 위치와 생존을 관리하는 구조 특화 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/lifeweaver/"
+    },
+    {
+      "id": "lucio",
+      "name_en": "Lúcio",
+      "name_ko": "루시우",
+      "role": "support",
+      "official_subrole": "Tactician",
+      "positions": [
+        "midline",
+        "flank",
+        "frontline"
+      ],
+      "tags": [
+        "speed-boost",
+        "mobility",
+        "boop"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 3,
+        "mobility": 5,
+        "aggression": 3,
+        "damage": 3,
+        "durability": 3,
+        "protection": 4,
+        "healing": 4,
+        "control": 4,
+        "complexity": 5,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "벽타기와 속도 증폭으로 팀의 진입과 후퇴를 지휘하는 고기동 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/lucio/"
+    },
+    {
+      "id": "mercy",
+      "name_en": "Mercy",
+      "name_ko": "메르시",
+      "role": "support",
+      "official_subrole": "Medic",
+      "positions": [
+        "backline",
+        "midline"
+      ],
+      "tags": [
+        "pocket",
+        "resurrect",
+        "mobility"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 1,
+        "mobility": 5,
+        "aggression": 1,
+        "damage": 1,
+        "durability": 3,
+        "protection": 5,
+        "healing": 5,
+        "control": 1,
+        "complexity": 2,
+        "beginner_friendly": 5
+      },
+      "summary_ko": "조준 부담이 적고 지속 치유, 공격력 증폭, 부활로 아군 한 명을 강하게 보조하는 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/mercy/"
+    },
+    {
+      "id": "mizuki",
+      "name_en": "Mizuki",
+      "name_ko": "미즈키",
+      "role": "support",
+      "official_subrole": "Survivor",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "bounce-heal",
+        "tether",
+        "sanctuary"
+      ],
+      "scores": {
+        "range": 3,
+        "aim": 3,
+        "mobility": 4,
+        "aggression": 3,
+        "damage": 3,
+        "durability": 3,
+        "protection": 4,
+        "healing": 5,
+        "control": 5,
+        "complexity": 4,
+        "beginner_friendly": 2
+      },
+      "summary_ko": "튕기는 치유와 적 구속, 투사체 방어 구역으로 난전을 관리하는 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/mizuki/"
+    },
+    {
+      "id": "moira",
+      "name_en": "Moira",
+      "name_ko": "모이라",
+      "role": "support",
+      "official_subrole": "Medic",
+      "positions": [
+        "midline",
+        "flank"
+      ],
+      "tags": [
+        "easy-aim",
+        "area-heal",
+        "escape"
+      ],
+      "scores": {
+        "range": 2,
+        "aim": 1,
+        "mobility": 4,
+        "aggression": 3,
+        "damage": 3,
+        "durability": 4,
+        "protection": 2,
+        "healing": 5,
+        "control": 1,
+        "complexity": 1,
+        "beginner_friendly": 5
+      },
+      "summary_ko": "조준 부담이 낮고 광역 치유와 뛰어난 생존기를 갖춘 입문 친화적 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/moira/"
+    },
+    {
+      "id": "wuyang",
+      "name_en": "Wuyang",
+      "name_ko": "우양",
+      "role": "support",
+      "official_subrole": "Survivor",
+      "positions": [
+        "midline",
+        "backline"
+      ],
+      "tags": [
+        "guided-projectile",
+        "adaptive-heal",
+        "knockback"
+      ],
+      "scores": {
+        "range": 4,
+        "aim": 4,
+        "mobility": 4,
+        "aggression": 2,
+        "damage": 3,
+        "durability": 3,
+        "protection": 4,
+        "healing": 5,
+        "control": 5,
+        "complexity": 5,
+        "beginner_friendly": 1
+      },
+      "summary_ko": "유도 물방울과 유동적인 치유, 밀쳐내기로 전투 흐름을 조절하는 고난도 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/wuyang/"
+    },
+    {
+      "id": "zenyatta",
+      "name_en": "Zenyatta",
+      "name_ko": "젠야타",
+      "role": "support",
+      "official_subrole": "Tactician",
+      "positions": [
+        "backline"
+      ],
+      "tags": [
+        "discord",
+        "projectile",
+        "offensive-support"
+      ],
+      "scores": {
+        "range": 5,
+        "aim": 4,
+        "mobility": 1,
+        "aggression": 3,
+        "damage": 4,
+        "durability": 2,
+        "protection": 2,
+        "healing": 4,
+        "control": 3,
+        "complexity": 3,
+        "beginner_friendly": 3
+      },
+      "summary_ko": "부조화 구슬로 적을 약화하고 강한 원거리 피해를 더하는 공격적인 지원 영웅",
+      "source_url": "https://overwatch.blizzard.com/ko-kr/heroes/zenyatta/"
+    }
+  ]
+}
