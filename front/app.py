@@ -559,6 +559,156 @@ APP_HTML = f"""
                     </div>
                 </div>
             </article>
+
+            <!-- Q6. 선호 전투 위치 질문 -->
+            <article id="question-6" class="question-panel question-six-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q6.</span>
+                        <span>선호 전투 위치</span>
+                    </h1>
+
+                    <p class="question-description">
+                        전투가 시작된다면 주로 어디에서 활약하고 싶나요?
+                    </p>
+                </div>
+
+                <div
+                    class="position-grid"
+                    role="radiogroup"
+                    aria-label="선호 전투 위치"
+                >
+                    <button
+                        class="position-card"
+                        type="button"
+                        data-position="frontline"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        최전방 - 적과 가장 가까운 곳에서 싸워요
+                    </button>
+
+                    <button
+                        class="position-card"
+                        type="button"
+                        data-position="midline"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        중간 전선 - 공격과 지원을 유연하게 수행해요
+                    </button>
+
+                    <button
+                        class="position-card"
+                        type="button"
+                        data-position="backline"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        후방 - 안전한 거리에서 팀을 지원해요
+                    </button>
+
+                    <button
+                        class="position-card"
+                        type="button"
+                        data-position="flank"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        측면·적 후방 - 몰래 접근해 적을 흔들어요
+                    </button>
+
+                    <button
+                        class="position-card"
+                        type="button"
+                        data-position="flexible"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        상황에 따라 달라요
+                    </button>
+                </div>
+            </article>
+
+            <!-- Q7. 가장 중요한 능력 질문 -->
+            <article id="question-7" class="question-panel question-seven-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q7.</span>
+                        <span>가장 중요한 능력</span>
+                    </h1>
+
+                    <p class="question-description">
+                        영웅을 선택할 때 가장 중요하게 생각하는 능력은 무엇인가요?
+                    </p>
+                </div>
+
+                <div
+                    class="priority-grid"
+                    role="radiogroup"
+                    aria-label="가장 중요한 능력"
+                >
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="damage"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        높은 공격력
+                    </button>
+
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="healing"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        강력한 치유
+                    </button>
+
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="survival"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        튼튼한 생존력
+                    </button>
+
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="control"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        적 방해 및 전장 제어
+                    </button>
+
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="protection"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        아군 보호와 구조
+                    </button>
+
+                    <button
+                        class="priority-card"
+                        type="button"
+                        data-priority="easy"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        쉬운 조작과 입문 난이도
+                    </button>
+                </div>
+            </article>
         </div>
 
         <nav class="quiz-navigation" aria-label="질문 이동">
@@ -638,6 +788,8 @@ button {
 button,
 .orange-button,
 .role-card,
+.position-card,
+.priority-card,
 .arrow-button,
 .brand-button {
     -webkit-tap-highlight-color: transparent;
@@ -1684,6 +1836,266 @@ button,
 }
 
 /* ========================================================
+   Q6 선호 전투 위치 카드
+======================================================== */
+
+.position-grid {
+    margin-top: 38px;
+    margin-inline: auto;
+
+    width: min(680px, 100%);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.position-card {
+    position: relative;
+
+    width: 100%;
+    min-height: 78px;
+
+    margin: 0;
+    padding: 0 38px;
+
+    display: flex;
+    align-items: center;
+
+    color: rgba(255, 255, 255, 0.84);
+    background:
+        linear-gradient(
+            90deg,
+            rgba(20, 29, 44, 0.82),
+            rgba(13, 21, 35, 0.74)
+        );
+
+    border:
+        2px solid
+        rgba(255, 255, 255, 0.20);
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.14);
+
+    font-size: clamp(17px, 1.08vw, 22px);
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+
+    text-align: left;
+
+    cursor: pointer;
+    overflow: hidden;
+
+    transition:
+        transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 140ms ease,
+        border-color 140ms ease,
+        background-color 140ms ease,
+        box-shadow 140ms ease;
+}
+
+.position-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(77, 181, 251, 0.22),
+            rgba(42, 94, 150, 0.08)
+        );
+
+    pointer-events: none;
+
+    transition:
+        opacity 140ms ease;
+}
+
+.position-card:hover {
+    transform: translateY(-5px);
+
+    color: #ffffff;
+
+    border-color:
+        rgba(255, 255, 255, 0.42);
+
+    box-shadow:
+        0 17px 34px
+        rgba(0, 0, 0, 0.25);
+}
+
+.position-card.selected {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: var(--selected-blue);
+
+    background:
+        rgba(48, 99, 158, 0.46);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(77, 181, 251, 0.28),
+        0 15px 32px
+        rgba(24, 117, 190, 0.20);
+}
+
+.position-card.selected::before {
+    opacity: 1;
+}
+
+.position-card.selected:hover {
+    transform: translateY(-5px);
+}
+
+.position-card:focus-visible {
+    outline:
+        3px solid
+        rgba(77, 181, 251, 0.78);
+
+    outline-offset: 4px;
+}
+
+/* ========================================================
+   Q7 가장 중요한 능력 카드
+======================================================== */
+
+.priority-grid {
+    margin-top: 94px;
+    margin-inline: auto;
+
+    width: min(640px, 100%);
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 28px;
+}
+
+.priority-card {
+    position: relative;
+
+    width: 100%;
+    min-height: 82px;
+
+    margin: 0;
+    padding: 0 38px;
+
+    display: flex;
+    align-items: center;
+
+    color: rgba(255, 255, 255, 0.84);
+    background:
+        linear-gradient(
+            100deg,
+            rgba(20, 29, 44, 0.84),
+            rgba(13, 21, 35, 0.76)
+        );
+
+    border:
+        2px solid
+        rgba(255, 255, 255, 0.20);
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.14);
+
+    font-size: clamp(17px, 1.08vw, 22px);
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+
+    text-align: left;
+
+    cursor: pointer;
+    overflow: hidden;
+
+    transition:
+        transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 140ms ease,
+        border-color 140ms ease,
+        background-color 140ms ease,
+        box-shadow 140ms ease;
+}
+
+.priority-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(77, 181, 251, 0.22),
+            rgba(42, 94, 150, 0.08)
+        );
+
+    pointer-events: none;
+
+    transition:
+        opacity 140ms ease;
+}
+
+.priority-card:hover {
+    transform: translateY(-6px);
+
+    color: #ffffff;
+
+    border-color:
+        rgba(255, 255, 255, 0.42);
+
+    box-shadow:
+        0 17px 34px
+        rgba(0, 0, 0, 0.25);
+}
+
+.priority-card.selected {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: var(--selected-blue);
+
+    background:
+        rgba(48, 99, 158, 0.46);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(77, 181, 251, 0.28),
+        0 15px 32px
+        rgba(24, 117, 190, 0.20);
+}
+
+.priority-card.selected::before {
+    opacity: 1;
+}
+
+.priority-card.selected:hover {
+    transform: translateY(-6px);
+}
+
+.priority-card:focus-visible {
+    outline:
+        3px solid
+        rgba(77, 181, 251, 0.78);
+
+    outline-offset: 4px;
+}
+
+/* ========================================================
    하단 이동 및 진행도
 ======================================================== */
 
@@ -1923,6 +2335,27 @@ button,
         margin-top: 50px;
     }
 
+    .position-grid {
+        margin-inline: auto;
+        width: min(650px, 100%);
+        gap: 15px;
+    }
+
+    .position-card {
+        min-height: 70px;
+        padding: 0 30px;
+    }
+
+    .priority-grid {
+        width: min(620px, 100%);
+        gap: 18px 22px;
+    }
+
+    .priority-card {
+        min-height: 74px;
+        padding: 0 30px;
+    }
+
     .role-card {
         height: 310px;
         padding-top: 54px;
@@ -2046,6 +2479,30 @@ button,
             repeat(2, minmax(0, 1fr));
     }
 
+    .position-grid {
+        margin-inline: auto;
+        width: min(680px, 76vw);
+        gap: 13px;
+    }
+
+    .position-card {
+        min-height: 64px;
+        padding: 0 24px;
+        font-size: 17px;
+    }
+
+    .priority-grid {
+        margin-top: 70px;
+        width: min(680px, 76vw);
+        gap: 14px 18px;
+    }
+
+    .priority-card {
+        min-height: 66px;
+        padding: 0 24px;
+        font-size: 17px;
+    }
+
     .role-card {
         height: 255px;
         padding-top: 32px;
@@ -2143,6 +2600,34 @@ button,
         font-size: 12px;
     }
 
+    .position-grid {
+        margin-top: 26px;
+        margin-inline: auto;
+        width: 90vw;
+        gap: 9px;
+    }
+
+    .position-card {
+        min-height: 53px;
+        padding: 0 15px;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    .priority-grid {
+        margin-top: 34px;
+        width: 90vw;
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .priority-card {
+        min-height: 52px;
+        padding: 0 16px;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
     .quiz-navigation {
         grid-template-columns:
             56px
@@ -2209,6 +2694,8 @@ export default function(component) {
         3: parentElement.querySelector("#question-3"),
         4: parentElement.querySelector("#question-4"),
         5: parentElement.querySelector("#question-5"),
+        6: parentElement.querySelector("#question-6"),
+        7: parentElement.querySelector("#question-7"),
     };
 
     const homeButton = parentElement.querySelector("#home-button");
@@ -2258,6 +2745,18 @@ export default function(component) {
         )
     );
 
+    const positionCards = Array.from(
+        parentElement.querySelectorAll(
+            "#question-6 .position-card"
+        )
+    );
+
+    const priorityCards = Array.from(
+        parentElement.querySelectorAll(
+            "#question-7 .priority-card"
+        )
+    );
+
     const progressDots = Array.from(
         parentElement.querySelectorAll(".progress-dot")
     );
@@ -2280,6 +2779,8 @@ export default function(component) {
             aim: null,
             mobility: null,
             aggression: null,
+            position: null,
+            priority: null,
         },
         isQuestionAnimating: false,
     };
@@ -2290,6 +2791,8 @@ export default function(component) {
     state.answers.aim ??= null;
     state.answers.mobility ??= null;
     state.answers.aggression ??= null;
+    state.answers.position ??= null;
+    state.answers.priority ??= null;
 
     const sliderAnimationFrames = new WeakMap();
     const sliderOriginalSteps = new WeakMap();
@@ -2531,8 +3034,20 @@ export default function(component) {
         state.answers.aim = null;
         state.answers.mobility = null;
         state.answers.aggression = null;
+        state.answers.position = null;
+        state.answers.priority = null;
 
         roleCards.forEach((card) => {
+            card.classList.remove("selected");
+            card.setAttribute("aria-checked", "false");
+        });
+
+        positionCards.forEach((card) => {
+            card.classList.remove("selected");
+            card.setAttribute("aria-checked", "false");
+        });
+
+        priorityCards.forEach((card) => {
             card.classList.remove("selected");
             card.setAttribute("aria-checked", "false");
         });
@@ -2702,6 +3217,8 @@ export default function(component) {
                 3: state.answers.aim !== null,
                 4: state.answers.mobility !== null,
                 5: state.answers.aggression !== null,
+                6: state.answers.position !== null,
+                7: state.answers.priority !== null,
             };
 
             const isCompleted =
@@ -2726,6 +3243,8 @@ export default function(component) {
             3: true,
             4: true,
             5: true,
+            6: state.answers.position !== null,
+            7: state.answers.priority !== null,
         };
 
         /*
@@ -3018,7 +3537,102 @@ export default function(component) {
         updateQuizUI();
     }
 
+    function selectPosition(card) {
+        const selectedPosition =
+            card.dataset.position;
+
+        const validPositions = [
+            "frontline",
+            "midline",
+            "backline",
+            "flank",
+            "flexible",
+        ];
+
+        if (
+            !validPositions.includes(
+                selectedPosition
+            )
+        ) {
+            return;
+        }
+
+        state.answers.position =
+            selectedPosition;
+
+        positionCards.forEach((positionCard) => {
+            const isSelected =
+                positionCard.dataset.position
+                === selectedPosition;
+
+            positionCard.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            positionCard.setAttribute(
+                "aria-checked",
+                String(isSelected)
+            );
+        });
+
+        updateQuizUI();
+    }
+
+    function selectPriority(card) {
+        const selectedPriority =
+            card.dataset.priority;
+
+        const validPriorities = [
+            "damage",
+            "survival",
+            "protection",
+            "healing",
+            "control",
+            "easy",
+        ];
+
+        if (
+            !validPriorities.includes(
+                selectedPriority
+            )
+        ) {
+            return;
+        }
+
+        state.answers.priority =
+            selectedPriority;
+
+        priorityCards.forEach((priorityCard) => {
+            const isSelected =
+                priorityCard.dataset.priority
+                === selectedPriority;
+
+            priorityCard.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            priorityCard.setAttribute(
+                "aria-checked",
+                String(isSelected)
+            );
+        });
+
+        updateQuizUI();
+    }
+
     function handlePrevious() {
+        if (state.currentQuestion === 7) {
+            moveQuestion(6, "backward");
+            return;
+        }
+
+        if (state.currentQuestion === 6) {
+            moveQuestion(5, "backward");
+            return;
+        }
+
         if (state.currentQuestion === 5) {
             moveQuestion(4, "backward");
             return;
@@ -3069,6 +3683,22 @@ export default function(component) {
             && state.answers.mobility !== null
         ) {
             moveQuestion(5, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 5
+            && state.answers.aggression !== null
+        ) {
+            moveQuestion(6, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 6
+            && state.answers.position !== null
+        ) {
+            moveQuestion(7, "forward");
         }
     }
 
@@ -3152,6 +3782,16 @@ export default function(component) {
                 button.dataset.aggression,
                 selectAggression
             );
+            return;
+        }
+
+        if (button.classList.contains("position-card")) {
+            selectPosition(button);
+            return;
+        }
+
+        if (button.classList.contains("priority-card")) {
+            selectPriority(button);
         }
     }
 
@@ -3340,6 +3980,38 @@ export default function(component) {
 
         card.classList.toggle("selected", isSelected);
         card.setAttribute("aria-checked", String(isSelected));
+    });
+
+    positionCards.forEach((card) => {
+        const isSelected =
+            card.dataset.position
+            === state.answers.position;
+
+        card.classList.toggle(
+            "selected",
+            isSelected
+        );
+
+        card.setAttribute(
+            "aria-checked",
+            String(isSelected)
+        );
+    });
+
+    priorityCards.forEach((card) => {
+        const isSelected =
+            card.dataset.priority
+            === state.answers.priority;
+
+        card.classList.toggle(
+            "selected",
+            isSelected
+        );
+
+        card.setAttribute(
+            "aria-checked",
+            String(isSelected)
+        );
     });
 
     updateRangeUI();
