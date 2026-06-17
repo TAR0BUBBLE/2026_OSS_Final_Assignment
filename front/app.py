@@ -3444,62 +3444,38 @@ export default function(component) {
         const viewportWidth = Math.max(1, window.innerWidth);
         const viewportHeight = Math.max(1, window.innerHeight);
 
-        const containScale = Math.min(
-            viewportWidth / DESIGN_WIDTH,
-            viewportHeight / DESIGN_HEIGHT
-        );
-
-        const coverScale = Math.max(
-            viewportWidth / DESIGN_WIDTH,
-            viewportHeight / DESIGN_HEIGHT
-        );
-
-        const viewportAspect =
-            viewportWidth / viewportHeight;
-
-        const designAspect =
-            DESIGN_WIDTH / DESIGN_HEIGHT;
-
         /*
-        홈 화면은 전체 배경 구성을 모두 보여주기 위해 contain을 유지합니다.
-        캐릭터가 등장하는 화면은 가로가 더 넓은 데스크톱 환경에서만
-        cover 방식으로 확장하여 오른쪽 여백 없이 화면을 채웁니다.
+        모든 화면을 1920×1080 기준 비율로 동일하게 축소합니다.
+        cover 방식은 화면 너비를 채우는 대신 UI 전체를 확대하고
+        하단 요소를 아래로 밀어낼 수 있으므로 사용하지 않습니다.
         */
-        const useEdgeToEdgeLayout =
-            app.dataset.screen !== "home"
-            && viewportAspect > designAspect
-            && viewportWidth >= 1000
-            && viewportHeight >= 650;
-
         const scale = Math.max(
             0.1,
-            useEdgeToEdgeLayout
-                ? coverScale
-                : containScale
+            Math.min(
+                viewportWidth / DESIGN_WIDTH,
+                viewportHeight / DESIGN_HEIGHT
+            )
         );
 
         const renderedWidth = DESIGN_WIDTH * scale;
         const renderedHeight = DESIGN_HEIGHT * scale;
 
+        /*
+        남는 공간은 좌우 또는 상하에 동일하게 배분합니다.
+        따라서 창 크기가 달라져도 질문, 카드, 화살표와 진행도의
+        크기 및 상대 위치가 항상 같은 비율로 유지됩니다.
+        */
         const offsetX =
             (viewportWidth - renderedWidth) / 2;
 
-        /*
-        cover 적용 시 상단 헤더가 잘리지 않도록 위쪽을 기준으로 맞춥니다.
-        일반 contain 모드에서는 기존처럼 정중앙에 배치합니다.
-        */
-        const offsetY = useEdgeToEdgeLayout
-            ? 0
-            : (viewportHeight - renderedHeight) / 2;
+        const offsetY =
+            (viewportHeight - renderedHeight) / 2;
 
         app.style.transform =
             `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scale})`;
 
         app.dataset.viewportScale = String(scale);
-        app.dataset.fitMode =
-            useEdgeToEdgeLayout
-                ? "cover"
-                : "contain";
+        app.dataset.fitMode = "contain";
 
         viewport.classList.add("is-fitted");
     }
