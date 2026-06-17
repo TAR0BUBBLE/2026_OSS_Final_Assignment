@@ -6,11 +6,6 @@
 - 학번 / 이름: **2023204017 최유진**
 - GitHub: https://github.com/TAR0BUBBLE/2026_OSS_Final_Assignment
 
-## 배포 주소
-
-- Streamlit: http://32.196.247.53:8501
-- FastAPI Swagger: http://32.196.247.53:8000/docs
-- FastAPI Health Check: http://32.196.247.53:8000/health
 
 > AWS Learner Lab의 EC2 인스턴스를 사용하므로 Lab 세션 종료 또는 퍼블릭 IP 변경 시 접속이 제한될 수 있습니다.
 
