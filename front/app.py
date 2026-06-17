@@ -1,6 +1,7 @@
 import base64
 import json
 import mimetypes
+import os
 from pathlib import Path
 
 import streamlit as st
@@ -37,7 +38,13 @@ ARROW_RIGHT_GRAY_PATH = ASSETS_DIR / "icons" / "arrow_right_gray.png"
 ARROW_RIGHT_WHITE_PATH = ASSETS_DIR / "icons" / "arrow_right_white.png"
 ARROW_RIGHT_ORANGE_PATH = ASSETS_DIR / "icons" / "arrow_right_orange.png"
 
-STUDENT_INFO = "2023204017 최유진"
+CHECK_ICON_PATH = ASSETS_DIR / "icons" / "check_icon.png"
+
+# 비워 두면 브라우저의 현재 호스트와 8000번 포트를 자동으로 사용합니다.
+# EC2에서 별도 주소가 필요하면 FASTAPI_PUBLIC_URL 환경변수로 지정할 수 있습니다.
+API_BASE_URL = os.getenv("FASTAPI_PUBLIC_URL", "").strip().rstrip("/")
+
+APP_NAME_INFO = "Find Your Hero"
 
 
 # =========================================================
@@ -139,6 +146,8 @@ ARROW_RIGHT_GRAY_URI = image_to_data_uri(ARROW_RIGHT_GRAY_PATH)
 ARROW_RIGHT_WHITE_URI = image_to_data_uri(ARROW_RIGHT_WHITE_PATH)
 ARROW_RIGHT_ORANGE_URI = image_to_data_uri(ARROW_RIGHT_ORANGE_PATH)
 
+CHECK_ICON_URI = image_to_data_uri(CHECK_ICON_PATH)
+
 
 # =========================================================
 # Custom Component HTML
@@ -179,7 +188,7 @@ APP_HTML = f"""
         </button>
 
         <div class="student-badge">
-            {STUDENT_INFO}
+            {APP_NAME_INFO}
         </div>
     </header>
 
@@ -709,7 +718,70 @@ APP_HTML = f"""
                     </button>
                 </div>
             </article>
+
+            <!-- Q8. 게임 경험 수준 질문 -->
+            <article id="question-8" class="question-panel question-eight-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q8.</span>
+                        <span>게임 경험 수준</span>
+                    </h1>
+
+                    <p class="question-description">
+                        FPS 또는 오버워치 경험은 어느 정도인가요?
+                    </p>
+                </div>
+
+                <div
+                    class="experience-grid"
+                    role="radiogroup"
+                    aria-label="게임 경험 수준"
+                >
+                    <button
+                        class="experience-card"
+                        type="button"
+                        data-experience="beginner"
+                        role="radio"
+                        aria-checked="false"
+                        aria-label="입문자 — 처음 시작하거나 아직 익숙하지 않아요"
+                    >
+                        <strong class="experience-card-title">입문자</strong>
+                    </button>
+
+                    <button
+                        class="experience-card"
+                        type="button"
+                        data-experience="intermediate"
+                        role="radio"
+                        aria-checked="false"
+                        aria-label="중급자 — 기본적인 조작과 게임 규칙을 알고 있어요"
+                    >
+                        <strong class="experience-card-title">중급자</strong>
+                    </button>
+
+                    <button
+                        class="experience-card"
+                        type="button"
+                        data-experience="advanced"
+                        role="radio"
+                        aria-checked="false"
+                        aria-label="숙련자 — 어려운 영웅과 복잡한 운영도 괜찮아요"
+                    >
+                        <strong class="experience-card-title">숙련자</strong>
+                    </button>
+                </div>
+            </article>
         </div>
+
+        <button
+            id="result-button"
+            class="result-button"
+            type="button"
+            disabled
+            aria-hidden="true"
+        >
+            결과보기
+        </button>
 
         <nav class="quiz-navigation" aria-label="질문 이동">
             <button
@@ -728,14 +800,14 @@ APP_HTML = f"""
             </button>
 
             <div id="progress-dots" class="progress-dots" aria-label="질문 진행도">
-                <span class="progress-dot current" data-index="1"></span>
-                <span class="progress-dot pending" data-index="2"></span>
-                <span class="progress-dot pending" data-index="3"></span>
-                <span class="progress-dot pending" data-index="4"></span>
-                <span class="progress-dot pending" data-index="5"></span>
-                <span class="progress-dot pending" data-index="6"></span>
-                <span class="progress-dot pending" data-index="7"></span>
-                <span class="progress-dot pending" data-index="8"></span>
+                <button class="progress-dot current" type="button" data-index="1" aria-label="1번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="2" aria-label="2번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="3" aria-label="3번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="4" aria-label="4번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="5" aria-label="5번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="6" aria-label="6번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="7" aria-label="7번 질문" disabled></button>
+                <button class="progress-dot pending" type="button" data-index="8" aria-label="8번 질문" disabled></button>
             </div>
 
             <button
@@ -753,6 +825,55 @@ APP_HTML = f"""
                 />
             </button>
         </nav>
+    </section>
+
+    <!-- 추천 결과 화면 -->
+    <section id="result-screen" class="screen result-screen" aria-live="polite">
+        <div class="result-heading">
+            <h1 class="result-title">
+                너에게 <span>딱 맞는</span> 영웅 추천 순위!
+            </h1>
+
+            <p class="result-description">
+                너의 성향을 분석한 결과야! 가장 마음에 드는 영웅을 선택해봐
+            </p>
+        </div>
+
+        <div class="result-scroll-shell">
+            <div
+                id="result-scroll-container"
+                class="result-scroll-container"
+                tabindex="0"
+                aria-label="추천 영웅 결과 목록"
+            >
+                <div id="result-loading" class="result-loading">
+                    <span class="result-spinner" aria-hidden="true"></span>
+                    <strong>너에게 맞는 영웅을 분석하고 있어...</strong>
+                    <span>잠시만 기다려줘!</span>
+                </div>
+
+                <div id="result-error" class="result-error" hidden>
+                    <strong>추천 결과를 불러오지 못했어.</strong>
+                    <p id="result-error-message"></p>
+                    <button
+                        class="result-retry-button"
+                        type="button"
+                    >
+                        다시 계산하기
+                    </button>
+                </div>
+
+                <div id="result-content" class="result-content" hidden></div>
+            </div>
+        </div>
+
+        <button
+            id="restart-button"
+            class="orange-button result-restart-button"
+            type="button"
+        >
+            처음으로
+        </button>
     </section>
 </main>
 """
@@ -790,6 +911,11 @@ button,
 .role-card,
 .position-card,
 .priority-card,
+.experience-card,
+.result-button,
+.result-retry-button,
+.result-restart-button,
+.progress-dot,
 .arrow-button,
 .brand-button {
     -webkit-tap-highlight-color: transparent;
@@ -856,7 +982,8 @@ button,
 }
 
 #ow-app[data-screen="welcome"] .background-shade,
-#ow-app[data-screen="quiz"] .background-shade {
+#ow-app[data-screen="quiz"] .background-shade,
+#ow-app[data-screen="result"] .background-shade {
     background:
         linear-gradient(
             90deg,
@@ -1006,7 +1133,8 @@ button,
 }
 
 #ow-app[data-screen="welcome"] .character-image,
-#ow-app[data-screen="quiz"] .character-image {
+#ow-app[data-screen="quiz"] .character-image,
+#ow-app[data-screen="result"] .character-image {
     opacity: 1;
     transform: translateX(0) scale(1);
 }
@@ -2096,6 +2224,928 @@ button,
 }
 
 /* ========================================================
+   Q8 게임 경험 수준 카드
+======================================================== */
+
+.experience-grid {
+    margin-top: 60px;
+    margin-inline: auto;
+
+    width: min(680px, 100%);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.experience-card {
+    position: relative;
+
+    width: 100%;
+    min-height: 82px;
+
+    margin: 0;
+    padding: 16px 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    color: rgba(255, 255, 255, 0.84);
+    background:
+        linear-gradient(
+            100deg,
+            rgba(20, 29, 44, 0.84),
+            rgba(13, 21, 35, 0.76)
+        );
+
+    border:
+        2px solid
+        rgba(255, 255, 255, 0.20);
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.14);
+
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+
+    transition:
+        transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 140ms ease,
+        border-color 140ms ease,
+        background-color 140ms ease,
+        box-shadow 140ms ease;
+}
+
+.experience-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(77, 181, 251, 0.22),
+            rgba(42, 94, 150, 0.08)
+        );
+
+    pointer-events: none;
+
+    transition:
+        opacity 140ms ease;
+}
+
+.experience-card-title {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+
+    font-size: clamp(18px, 1.18vw, 24px);
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+
+.experience-card:hover {
+    transform: translateY(-6px);
+
+    color: #ffffff;
+
+    border-color:
+        rgba(255, 255, 255, 0.42);
+
+    box-shadow:
+        0 17px 34px
+        rgba(0, 0, 0, 0.25);
+}
+
+.experience-card.selected {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: var(--selected-blue);
+    background: rgba(48, 99, 158, 0.46);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(77, 181, 251, 0.28),
+        0 15px 32px
+        rgba(24, 117, 190, 0.20);
+}
+
+.experience-card.selected::before {
+    opacity: 1;
+}
+
+.experience-card.selected:hover {
+    transform: translateY(-6px);
+}
+
+.experience-card:focus-visible {
+    outline:
+        3px solid
+        rgba(77, 181, 251, 0.78);
+
+    outline-offset: 4px;
+}
+
+/* ========================================================
+   모든 답변 완료 후 표시되는 결과보기 버튼
+======================================================== */
+
+.result-button {
+    position: absolute;
+    z-index: 18;
+
+    left: calc(6.1vw + min(29vw, 557.5px));
+    bottom: 15.8vh;
+
+    width: 280px;
+    height: 104px;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+    background: var(--accent-orange);
+    border: 0;
+    border-radius: 0;
+
+    font-size: clamp(26px, 1.8vw, 36px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -1px;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 14px);
+    pointer-events: none;
+    cursor: pointer;
+
+    box-shadow:
+        0 14px 30px
+        rgba(0, 0, 0, 0.24);
+
+    transition:
+        opacity 220ms ease,
+        visibility 0s linear 220ms,
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 130ms ease,
+        box-shadow 130ms ease;
+}
+
+.result-button.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+
+    transition:
+        opacity 220ms ease,
+        visibility 0s,
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 130ms ease,
+        box-shadow 130ms ease;
+}
+
+.result-button.visible:hover {
+    background: var(--accent-orange-hover);
+    transform: translate(-50%, -5px);
+
+    box-shadow:
+        0 20px 38px
+        rgba(0, 0, 0, 0.30);
+}
+
+.result-button.visible:active {
+    transform: translate(-50%, 0) scale(0.988);
+}
+
+.result-button.submitted {
+    background: #3f9fe0;
+}
+
+/* ========================================================
+   추천 결과 화면
+======================================================== */
+
+.result-screen {
+    z-index: 14;
+}
+
+.result-heading {
+    position: absolute;
+    z-index: 12;
+
+    top: 18.2vh;
+    left: 9.5vw;
+
+    width: min(48.5vw, 930px);
+
+    text-align: center;
+}
+
+.result-title {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: clamp(44px, 3.55vw, 68px);
+    line-height: 1.04;
+    font-weight: 850;
+    letter-spacing: -3px;
+
+    text-shadow:
+        0 4px 14px
+        rgba(0, 0, 0, 0.28);
+}
+
+.result-title span {
+    color: var(--accent-yellow);
+}
+
+.result-description {
+    margin: 28px 0 0;
+
+    color: rgba(255, 255, 255, 0.80);
+
+    font-size: clamp(19px, 1.42vw, 28px);
+    line-height: 1.35;
+    font-weight: 650;
+    letter-spacing: -1px;
+}
+
+.result-scroll-shell {
+    position: absolute;
+    z-index: 13;
+
+    top: 36.5vh;
+    left: 9.5vw;
+
+    width: min(48.5vw, 930px);
+    height: 42.5vh;
+
+    min-height: 390px;
+    max-height: 500px;
+}
+
+.result-scroll-container {
+    width: 100%;
+    height: 100%;
+
+    padding: 0 14px 28px 0;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+
+    scroll-behavior: smooth;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(237, 108, 37, 0.92)
+        rgba(255, 255, 255, 0.10);
+}
+
+.result-scroll-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.result-scroll-container::-webkit-scrollbar-track {
+    background:
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 999px;
+}
+
+.result-scroll-container::-webkit-scrollbar-thumb {
+    min-height: 74px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-orange-hover),
+            var(--accent-orange)
+        );
+
+    border:
+        3px solid
+        rgba(12, 20, 34, 0.82);
+
+    border-radius: 999px;
+}
+
+.result-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-orange-hover);
+}
+
+.result-content {
+    min-height: 100%;
+
+    padding: 0 2px 32px;
+}
+
+.result-content[hidden],
+.result-loading[hidden],
+.result-error[hidden] {
+    display: none !important;
+}
+
+.result-loading,
+.result-error {
+    width: 100%;
+    min-height: 360px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    background:
+        rgba(14, 21, 35, 0.74);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 18px 42px
+        rgba(0, 0, 0, 0.22);
+}
+
+.result-loading strong,
+.result-error strong {
+    color: #ffffff;
+    font-size: clamp(20px, 1.35vw, 27px);
+}
+
+.result-loading span:last-child,
+.result-error p {
+    margin: 0;
+
+    font-size: clamp(14px, 0.95vw, 18px);
+    text-align: center;
+}
+
+.result-spinner {
+    width: 54px;
+    height: 54px;
+
+    border:
+        6px solid
+        rgba(255, 255, 255, 0.18);
+
+    border-top-color: var(--accent-orange);
+    border-radius: 50%;
+
+    animation:
+        result-spinner-rotate
+        760ms linear infinite;
+}
+
+.result-retry-button {
+    min-width: 180px;
+    height: 58px;
+
+    margin-top: 10px;
+    padding: 0 24px;
+
+    color: #ffffff;
+    background: var(--accent-orange);
+
+    border: 0;
+    border-radius: 8px;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 140ms ease,
+        background-color 140ms ease;
+}
+
+.result-retry-button:hover {
+    background: var(--accent-orange-hover);
+    transform: translateY(-3px);
+}
+
+.recommendation-card {
+    position: relative;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(28, 28, 33, 0.87),
+            rgba(13, 20, 36, 0.83)
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.14);
+
+    box-shadow:
+        0 18px 42px
+        rgba(0, 0, 0, 0.22);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.primary-recommendation {
+    min-height: 365px;
+
+    padding: 30px;
+
+    display: grid;
+    grid-template-columns: 285px minmax(0, 1fr);
+    gap: 34px;
+
+    border-radius: 18px;
+}
+
+.hero-image-wrap {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(0, 0, 0, 0.18)
+        );
+
+    border-radius: 12px;
+}
+
+.primary-image-wrap {
+    width: 285px;
+    height: 305px;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    object-fit: cover;
+    object-position: center;
+
+    user-select: none;
+}
+
+.hero-image-wrap.image-missing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-image-fallback {
+    padding: 20px;
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.rank-chip {
+    position: absolute;
+    z-index: 3;
+
+    min-width: 64px;
+    height: 34px;
+
+    padding: 0 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #15100a;
+    background: var(--accent-yellow);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.22);
+
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+
+    box-shadow:
+        0 5px 14px
+        rgba(0, 0, 0, 0.30);
+}
+
+/* 1순위: 금색 */
+.rank-one-chip {
+    top: 14px;
+    left: 14px;
+
+    color: #2b1b05;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff4b8 0%,
+            #ffd86a 30%,
+            #f0b62e 62%,
+            #b9780f 100%
+        );
+
+    border-color:
+        rgba(255, 245, 191, 0.62);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.78),
+        0 0 16px
+        rgba(255, 182, 46, 0.22),
+        0 5px 14px
+        rgba(0, 0, 0, 0.30);
+}
+
+.compact-rank-chip {
+    top: 10px;
+    left: 10px;
+}
+
+/* 2순위: 은색 */
+.rank-second-chip {
+    color: #202833;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f7f9fc 0%,
+            #d6dce5 38%,
+            #aeb7c4 68%,
+            #8793a2 100%
+        );
+
+    border-color:
+        rgba(255, 255, 255, 0.56);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.72),
+        0 5px 14px
+        rgba(0, 0, 0, 0.30);
+}
+
+/* 3순위: 동색 */
+.rank-third-chip {
+    color: #2c160d;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8ad78 0%,
+            #c27a48 40%,
+            #9c5934 70%,
+            #743c25 100%
+        );
+
+    border-color:
+        rgba(255, 221, 190, 0.48);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 235, 215, 0.44),
+        0 5px 14px
+        rgba(0, 0, 0, 0.30);
+}
+
+.primary-result-info {
+    min-width: 0;
+
+    padding: 8px 0 0;
+}
+
+.result-hero-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.result-hero-name-block {
+    min-width: 0;
+
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.result-hero-name-en {
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: clamp(25px, 1.78vw, 34px);
+    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: 0.7px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-hero-name-ko {
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: clamp(17px, 1.05vw, 21px);
+    font-weight: 750;
+
+    white-space: nowrap;
+}
+
+.match-pill {
+    flex-shrink: 0;
+
+    min-width: 144px;
+    height: 48px;
+
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    color: var(--accent-yellow);
+    background: rgba(13, 18, 30, 0.70);
+
+    border:
+        1px solid
+        rgba(255, 182, 46, 0.50);
+
+    border-radius: 999px;
+
+    font-size: 17px;
+    font-weight: 850;
+}
+
+.match-pill::before {
+    content: "";
+
+    width: 10px;
+    height: 10px;
+
+    background: var(--accent-yellow);
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 12px
+        rgba(255, 182, 46, 0.60);
+}
+
+.primary-summary {
+    margin: 26px 0 0;
+
+    color: rgba(255, 255, 255, 0.88);
+
+    font-size: clamp(17px, 1.08vw, 21px);
+    line-height: 1.7;
+    font-weight: 620;
+    letter-spacing: -0.3px;
+}
+
+.result-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 26px 0 22px;
+
+    background:
+        rgba(255, 255, 255, 0.15);
+}
+
+.reason-title {
+    margin: 0 0 16px;
+
+    color: var(--accent-yellow);
+
+    font-size: 19px;
+    font-weight: 850;
+}
+
+.reason-list {
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    gap: 13px;
+
+    list-style: none;
+}
+
+.reason-item {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: clamp(14px, 0.92vw, 18px);
+    line-height: 1.5;
+}
+
+.reason-check-icon {
+    width: 20px;
+    height: 20px;
+
+    margin-top: 1px;
+
+    object-fit: contain;
+}
+
+.secondary-result-grid {
+    margin-top: 28px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.compact-recommendation {
+    min-height: 235px;
+
+    padding: 20px;
+
+    display: grid;
+    grid-template-columns: 174px minmax(0, 1fr);
+    gap: 20px;
+
+    border-radius: 18px;
+}
+
+.compact-image-wrap {
+    width: 174px;
+    height: 190px;
+}
+
+
+.compact-result-info {
+    min-width: 0;
+
+    padding-top: 5px;
+}
+
+.compact-match {
+    width: fit-content;
+
+    margin-left: auto;
+    padding: 7px 12px;
+
+    color: var(--accent-yellow);
+    background: rgba(10, 16, 28, 0.72);
+
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 850;
+}
+
+.compact-name-en {
+    margin: 15px 0 0;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: clamp(20px, 1.28vw, 25px);
+    line-height: 1.1;
+    font-weight: 900;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.compact-name-ko {
+    margin: 8px 0 0;
+
+    color: rgba(255, 255, 255, 0.60);
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.compact-summary {
+    margin: 22px 0 0;
+
+    display: -webkit-box;
+    overflow: hidden;
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 14px;
+    line-height: 1.62;
+    font-weight: 590;
+
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.result-restart-button {
+    position: absolute;
+
+    left: calc(9.5vw + min(24.25vw, 465px));
+    bottom: 5.9vh;
+
+    width: 280px;
+    height: 104px;
+
+    transform: translateX(-50%);
+
+    font-size: 32px;
+}
+
+.result-restart-button:hover {
+    transform:
+        translateX(-50%)
+        translateY(-4px);
+}
+
+.result-restart-button:active {
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(0.985);
+}
+
+.result-screen.animate-in .result-heading {
+    animation:
+        float-up 420ms
+        cubic-bezier(0.22, 1, 0.36, 1)
+        0ms both;
+}
+
+.result-screen.animate-in .result-scroll-shell {
+    animation:
+        float-up 460ms
+        cubic-bezier(0.22, 1, 0.36, 1)
+        70ms both;
+}
+
+.result-screen.animate-in .result-restart-button {
+    animation:
+        float-up-centered 460ms
+        cubic-bezier(0.22, 1, 0.36, 1)
+        130ms both;
+}
+
+@keyframes result-spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float-up-centered {
+    from {
+        opacity: 0;
+        transform:
+            translateX(-50%)
+            translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateX(-50%)
+            translateY(0);
+    }
+}
+
+/* ========================================================
    하단 이동 및 진행도
 ======================================================== */
 
@@ -2199,11 +3249,24 @@ button,
 
     flex-shrink: 0;
 
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+    border: 0;
     border-radius: 50%;
+
+    cursor: default;
 
     transition:
         background-color 110ms ease,
-        transform 110ms ease;
+        transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 140ms ease,
+        opacity 110ms ease;
+}
+
+.progress-dot:disabled {
+    opacity: 1;
 }
 
 .progress-dot.pending {
@@ -2218,6 +3281,26 @@ button,
 .progress-dot.current {
     background: var(--accent-orange);
     transform: scale(1.04);
+}
+
+.progress-dot.clickable {
+    cursor: pointer;
+}
+
+.progress-dot.clickable:hover {
+    transform: scale(1.28);
+
+    box-shadow:
+        0 0 0 7px
+        rgba(255, 255, 255, 0.11);
+}
+
+.progress-dot.clickable:focus-visible {
+    outline:
+        3px solid
+        rgba(77, 181, 251, 0.82);
+
+    outline-offset: 5px;
 }
 
 /* ========================================================
@@ -2354,6 +3437,23 @@ button,
     .priority-card {
         min-height: 74px;
         padding: 0 30px;
+    }
+
+    .experience-grid {
+        width: min(650px, 100%);
+        gap: 16px;
+    }
+
+    .experience-card {
+        min-height: 74px;
+        padding: 14px 30px;
+    }
+
+    .result-button {
+        left: calc(5vw + min(32.5vw, 557.5px));
+        width: 250px;
+        bottom: 13.6vh;
+        height: 90px;
     }
 
     .role-card {
@@ -2655,6 +3755,153 @@ button,
     }
 }
 
+
+@media (max-width: 1300px) {
+    .result-heading {
+        left: 7vw;
+        width: 57vw;
+    }
+
+    .result-scroll-shell {
+        left: 7vw;
+        width: 57vw;
+    }
+
+    .primary-recommendation {
+        grid-template-columns: 245px minmax(0, 1fr);
+    }
+
+    .primary-image-wrap {
+        width: 245px;
+    }
+
+    .compact-recommendation {
+        grid-template-columns: 145px minmax(0, 1fr);
+    }
+
+    .compact-image-wrap {
+        width: 145px;
+    }
+
+    .result-restart-button {
+        left: 35.5vw;
+    }
+}
+
+@media (max-width: 950px) {
+    .result-heading {
+        top: 17vh;
+        left: 5vw;
+        width: 90vw;
+    }
+
+    .result-title {
+        font-size: 45px;
+    }
+
+    .result-scroll-shell {
+        top: 32vh;
+        left: 5vw;
+        width: 90vw;
+        height: 51vh;
+        max-height: none;
+    }
+
+    .primary-recommendation {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .primary-image-wrap {
+        width: 220px;
+        height: 270px;
+    }
+
+    .secondary-result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .compact-recommendation {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+
+    .compact-image-wrap {
+        width: 180px;
+    }
+
+    .result-restart-button {
+        left: 50%;
+        bottom: 3.5vh;
+        width: 230px;
+        height: 82px;
+        font-size: 27px;
+    }
+}
+
+@media (max-width: 620px) {
+    .result-title {
+        font-size: 34px;
+        letter-spacing: -1.8px;
+    }
+
+    .result-description {
+        margin-top: 17px;
+        font-size: 17px;
+    }
+
+    .result-scroll-shell {
+        top: 30vh;
+        height: 55vh;
+    }
+
+    .primary-recommendation {
+        padding: 18px;
+        grid-template-columns: 1fr;
+    }
+
+    .primary-image-wrap {
+        width: 100%;
+        height: 240px;
+    }
+
+    .result-hero-heading {
+        align-items: flex-start;
+    }
+
+    .result-hero-name-block {
+        display: block;
+    }
+
+    .result-hero-name-ko {
+        display: block;
+        margin-top: 7px;
+    }
+
+    .match-pill {
+        min-width: 116px;
+        height: 41px;
+        padding: 0 13px;
+        font-size: 14px;
+    }
+
+    .compact-recommendation {
+        padding: 16px;
+        grid-template-columns: 122px minmax(0, 1fr);
+    }
+
+    .compact-image-wrap {
+        width: 122px;
+        height: 155px;
+    }
+
+    .result-restart-button {
+        bottom: 2.2vh;
+        width: 205px;
+        height: 70px;
+        font-size: 23px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -2686,6 +3933,7 @@ export default function(component) {
         home: parentElement.querySelector("#home-screen"),
         welcome: parentElement.querySelector("#welcome-screen"),
         quiz: parentElement.querySelector("#quiz-screen"),
+        result: parentElement.querySelector("#result-screen"),
     };
 
     const questions = {
@@ -2696,6 +3944,7 @@ export default function(component) {
         5: parentElement.querySelector("#question-5"),
         6: parentElement.querySelector("#question-6"),
         7: parentElement.querySelector("#question-7"),
+        8: parentElement.querySelector("#question-8"),
     };
 
     const homeButton = parentElement.querySelector("#home-button");
@@ -2704,6 +3953,13 @@ export default function(component) {
 
     const previousButton = parentElement.querySelector("#previous-question-button");
     const nextButton = parentElement.querySelector("#next-question-button");
+    const resultButton = parentElement.querySelector("#result-button");
+    const restartButton = parentElement.querySelector("#restart-button");
+    const resultScrollContainer = parentElement.querySelector("#result-scroll-container");
+    const resultLoading = parentElement.querySelector("#result-loading");
+    const resultError = parentElement.querySelector("#result-error");
+    const resultErrorMessage = parentElement.querySelector("#result-error-message");
+    const resultContent = parentElement.querySelector("#result-content");
 
     const roleCards = Array.from(
         parentElement.querySelectorAll(".role-card")
@@ -2757,6 +4013,12 @@ export default function(component) {
         )
     );
 
+    const experienceCards = Array.from(
+        parentElement.querySelectorAll(
+            "#question-8 .experience-card"
+        )
+    );
+
     const progressDots = Array.from(
         parentElement.querySelectorAll(".progress-dot")
     );
@@ -2768,7 +4030,11 @@ export default function(component) {
         rightGray: __ARROW_RIGHT_GRAY_URI__,
         rightWhite: __ARROW_RIGHT_WHITE_URI__,
         rightOrange: __ARROW_RIGHT_ORANGE_URI__,
+        check: __CHECK_ICON_URI__,
     };
+
+    const configuredApiBaseUrl = __API_BASE_URL__;
+    const apiBaseUrl = configuredApiBaseUrl || `${window.location.protocol}//${window.location.hostname}:8000`;
 
     const state = app.__owState ?? {
         screen: "home",
@@ -2781,8 +4047,12 @@ export default function(component) {
             aggression: null,
             position: null,
             priority: null,
+            experience: null,
         },
         isQuestionAnimating: false,
+        isResultLoading: false,
+        recommendations: null,
+        resultError: null,
     };
     app.__owState = state;
 
@@ -2793,6 +4063,10 @@ export default function(component) {
     state.answers.aggression ??= null;
     state.answers.position ??= null;
     state.answers.priority ??= null;
+    state.answers.experience ??= null;
+    state.isResultLoading ??= false;
+    state.recommendations ??= null;
+    state.resultError ??= null;
 
     const sliderAnimationFrames = new WeakMap();
     const sliderOriginalSteps = new WeakMap();
@@ -3025,6 +4299,20 @@ export default function(component) {
 
             updateQuizUI();
         }
+
+        if (screenName === "result") {
+            restartClassAnimation(
+                screens.result,
+                "animate-in"
+            );
+            clearAnimationClass(
+                screens.result,
+                "animate-in",
+                760
+            );
+
+            resultScrollContainer.scrollTop = 0;
+        }
     }
 
     function resetQuiz() {
@@ -3036,6 +4324,7 @@ export default function(component) {
         state.answers.aggression = null;
         state.answers.position = null;
         state.answers.priority = null;
+        state.answers.experience = null;
 
         roleCards.forEach((card) => {
             card.classList.remove("selected");
@@ -3051,6 +4340,19 @@ export default function(component) {
             card.classList.remove("selected");
             card.setAttribute("aria-checked", "false");
         });
+
+        experienceCards.forEach((card) => {
+            card.classList.remove("selected");
+            card.setAttribute("aria-checked", "false");
+        });
+
+        state.isResultLoading = false;
+        state.recommendations = null;
+        state.resultError = null;
+        resultContent.replaceChildren();
+        resultContent.hidden = true;
+        resultLoading.hidden = false;
+        resultError.hidden = true;
 
         updateRangeUI();
         updateAimUI();
@@ -3099,6 +4401,10 @@ export default function(component) {
         }
 
         state.isQuestionAnimating = true;
+
+        resultButton.classList.remove("visible", "submitted");
+        resultButton.disabled = true;
+        resultButton.setAttribute("aria-hidden", "true");
 
         ensureDefaultAnswerForQuestion(
             nextQuestion
@@ -3196,41 +4502,95 @@ export default function(component) {
         button.disabled = false;
     }
 
+    function getCompletedQuestions() {
+        return {
+            1: state.answers.role !== null,
+            2: state.answers.range !== null,
+            3: state.answers.aim !== null,
+            4: state.answers.mobility !== null,
+            5: state.answers.aggression !== null,
+            6: state.answers.position !== null,
+            7: state.answers.priority !== null,
+            8: state.answers.experience !== null,
+        };
+    }
+
+    function areAllAnswersComplete() {
+        return Object.values(
+            getCompletedQuestions()
+        ).every(Boolean);
+    }
+
     function updateProgressDots() {
+        const completedQuestions =
+            getCompletedQuestions();
+
         progressDots.forEach((dot, index) => {
             const questionNumber = index + 1;
+            const isCurrent =
+                questionNumber === state.currentQuestion;
+            const isCompleted =
+                completedQuestions[questionNumber] ?? false;
 
             dot.classList.remove(
                 "pending",
                 "completed",
-                "current"
+                "current",
+                "clickable"
             );
 
-            if (questionNumber === state.currentQuestion) {
+            dot.removeAttribute("aria-current");
+
+            if (isCurrent) {
                 dot.classList.add("current");
+                dot.disabled = true;
+                dot.setAttribute("aria-current", "step");
+                dot.setAttribute(
+                    "aria-label",
+                    `${questionNumber}번 질문, 현재 화면`
+                );
                 return;
             }
 
-            const completedQuestions = {
-                1: state.answers.role !== null,
-                2: state.answers.range !== null,
-                3: state.answers.aim !== null,
-                4: state.answers.mobility !== null,
-                5: state.answers.aggression !== null,
-                6: state.answers.position !== null,
-                7: state.answers.priority !== null,
-            };
+            if (isCompleted) {
+                dot.classList.add(
+                    "completed",
+                    "clickable"
+                );
+                dot.disabled = false;
+                dot.setAttribute(
+                    "aria-label",
+                    `${questionNumber}번 질문으로 이동`
+                );
+                return;
+            }
 
-            const isCompleted =
-                completedQuestions[questionNumber]
-                ?? false;
-
-            dot.classList.add(
-                isCompleted
-                    ? "completed"
-                    : "pending"
+            dot.classList.add("pending");
+            dot.disabled = true;
+            dot.setAttribute(
+                "aria-label",
+                `${questionNumber}번 질문, 아직 답변하지 않음`
             );
         });
+    }
+
+    function updateResultButton() {
+        const shouldShow =
+            state.currentQuestion === 8
+            && areAllAnswersComplete();
+
+        resultButton.classList.toggle(
+            "visible",
+            shouldShow
+        );
+
+        resultButton.classList.remove("submitted");
+        resultButton.textContent = "결과보기";
+        resultButton.disabled = !shouldShow;
+        resultButton.setAttribute(
+            "aria-hidden",
+            String(!shouldShow)
+        );
     }
 
     function updateNavigation() {
@@ -3245,6 +4605,7 @@ export default function(component) {
             5: true,
             6: state.answers.position !== null,
             7: state.answers.priority !== null,
+            8: state.answers.experience !== null,
         };
 
         /*
@@ -3283,6 +4644,7 @@ export default function(component) {
     function updateQuizUI() {
         updateProgressDots();
         updateNavigation();
+        updateResultButton();
     }
 
     function selectRole(card) {
@@ -3622,7 +4984,362 @@ export default function(component) {
         updateQuizUI();
     }
 
+    function selectExperience(card) {
+        const selectedExperience =
+            card.dataset.experience;
+
+        const validExperiences = [
+            "beginner",
+            "intermediate",
+            "advanced",
+        ];
+
+        if (
+            !validExperiences.includes(
+                selectedExperience
+            )
+        ) {
+            return;
+        }
+
+        state.answers.experience =
+            selectedExperience;
+
+        experienceCards.forEach((experienceCard) => {
+            const isSelected =
+                experienceCard.dataset.experience
+                === selectedExperience;
+
+            experienceCard.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            experienceCard.setAttribute(
+                "aria-checked",
+                String(isSelected)
+            );
+        });
+
+        updateQuizUI();
+    }
+
+    function handleProgressDotClick(dot) {
+        const targetQuestion =
+            Number(dot.dataset.index);
+
+        if (
+            !Number.isInteger(targetQuestion)
+            || targetQuestion === state.currentQuestion
+            || !questions[targetQuestion]
+        ) {
+            return;
+        }
+
+        const completedQuestions =
+            getCompletedQuestions();
+
+        /*
+        아직 답변하지 않은 미래 질문은 건너뛸 수 없고,
+        이미 답변을 완료한 질문만 자유롭게 다시 확인합니다.
+        */
+        if (!completedQuestions[targetQuestion]) {
+            return;
+        }
+
+        const direction =
+            targetQuestion > state.currentQuestion
+                ? "forward"
+                : "backward";
+
+        moveQuestion(
+            targetQuestion,
+            direction
+        );
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function formatMatchPercentage(value) {
+        const numericValue = Number(value);
+
+        if (!Number.isFinite(numericValue)) {
+            return "0.0";
+        }
+
+        return numericValue.toFixed(1);
+    }
+
+    function heroImageUrl(heroId) {
+        return `${apiBaseUrl}/hero-images/${encodeURIComponent(heroId)}.png`;
+    }
+
+    function createReasonItems(reasons) {
+        const safeReasons = Array.isArray(reasons)
+            ? reasons.slice(0, 3)
+            : [];
+
+        return safeReasons
+            .map((reason) => `
+                <li class="reason-item">
+                    <img
+                        class="reason-check-icon"
+                        src="${imageUris.check}"
+                        alt=""
+                        draggable="false"
+                    />
+                    <span>${escapeHtml(reason)}</span>
+                </li>
+            `)
+            .join("");
+    }
+
+    function createPrimaryResultCard(hero) {
+        return `
+            <article class="recommendation-card primary-recommendation">
+                <div class="hero-image-wrap primary-image-wrap">
+                    <img
+                        class="hero-image"
+                        src="${heroImageUrl(hero.hero_id)}"
+                        alt="${escapeHtml(hero.name_ko)} 영웅 이미지"
+                        draggable="false"
+                    />
+                    <span class="rank-chip rank-one-chip">1ST</span>
+                </div>
+
+                <div class="primary-result-info">
+                    <div class="result-hero-heading">
+                        <div class="result-hero-name-block">
+                            <strong class="result-hero-name-en">
+                                ${escapeHtml(hero.name_en)}
+                            </strong>
+                            <span class="result-hero-name-ko">
+                                ${escapeHtml(hero.name_ko)}
+                            </span>
+                        </div>
+
+                        <span class="match-pill">
+                            일치율 ${formatMatchPercentage(hero.match_percentage)}%
+                        </span>
+                    </div>
+
+                    <p class="primary-summary">
+                        “${escapeHtml(hero.summary)}”
+                    </p>
+
+                    <div class="result-divider"></div>
+
+                    <h3 class="reason-title">추천 이유</h3>
+                    <ul class="reason-list">
+                        ${createReasonItems(hero.reasons)}
+                    </ul>
+                </div>
+            </article>
+        `;
+    }
+
+    function createCompactResultCard(hero, rank) {
+        const rankLabel =
+            rank === 2
+                ? "2ND"
+                : "3RD";
+
+        const rankColorClass =
+            rank === 2
+                ? "rank-second-chip"
+                : "rank-third-chip";
+
+        return `
+            <article class="recommendation-card compact-recommendation">
+                <div class="hero-image-wrap compact-image-wrap">
+                    <img
+                        class="hero-image"
+                        src="${heroImageUrl(hero.hero_id)}"
+                        alt="${escapeHtml(hero.name_ko)} 영웅 이미지"
+                        draggable="false"
+                    />
+                    <span
+                        class="rank-chip compact-rank-chip ${rankColorClass}"
+                        aria-label="${rank}순위"
+                    >
+                        ${rankLabel}
+                    </span>
+                </div>
+
+                <div class="compact-result-info">
+                    <div class="compact-match">
+                        일치율 ${formatMatchPercentage(hero.match_percentage)}%
+                    </div>
+
+                    <h2 class="compact-name-en">
+                        ${escapeHtml(hero.name_en)}
+                    </h2>
+
+                    <p class="compact-name-ko">
+                        ${escapeHtml(hero.name_ko)}
+                    </p>
+
+                    <p class="compact-summary">
+                        ${escapeHtml(hero.summary)}
+                    </p>
+                </div>
+            </article>
+        `;
+    }
+
+    function installHeroImageFallbacks() {
+        const images = Array.from(
+            resultContent.querySelectorAll(".hero-image")
+        );
+
+        images.forEach((image) => {
+            image.addEventListener("error", () => {
+                const wrapper = image.closest(".hero-image-wrap");
+
+                if (!wrapper) {
+                    return;
+                }
+
+                const heroName = image.alt
+                    .replace(" 영웅 이미지", "");
+
+                image.remove();
+                wrapper.classList.add("image-missing");
+
+                const fallback = document.createElement("span");
+                fallback.className = "hero-image-fallback";
+                fallback.textContent = heroName;
+                wrapper.prepend(fallback);
+            }, { once: true });
+        });
+    }
+
+    function renderRecommendations(recommendations) {
+        if (
+            !Array.isArray(recommendations)
+            || recommendations.length < 1
+        ) {
+            throw new Error("추천 결과가 비어 있습니다.");
+        }
+
+        const primaryHero = recommendations[0];
+        const secondaryHeroes = recommendations.slice(1, 3);
+
+        resultContent.innerHTML = `
+            ${createPrimaryResultCard(primaryHero)}
+            <div class="secondary-result-grid">
+                ${secondaryHeroes
+                    .map((hero, index) =>
+                        createCompactResultCard(hero, index + 2)
+                    )
+                    .join("")}
+            </div>
+        `;
+
+        installHeroImageFallbacks();
+
+        resultLoading.hidden = true;
+        resultError.hidden = true;
+        resultContent.hidden = false;
+        resultScrollContainer.scrollTop = 0;
+    }
+
+    function showResultLoading() {
+        resultContent.hidden = true;
+        resultError.hidden = true;
+        resultLoading.hidden = false;
+        resultScrollContainer.scrollTop = 0;
+    }
+
+    function showResultError(message) {
+        resultLoading.hidden = true;
+        resultContent.hidden = true;
+        resultError.hidden = false;
+        resultErrorMessage.textContent = message;
+        resultScrollContainer.scrollTop = 0;
+    }
+
+    async function requestRecommendations() {
+        if (
+            !areAllAnswersComplete()
+            || state.isResultLoading
+        ) {
+            return;
+        }
+
+        state.isResultLoading = true;
+        state.resultError = null;
+
+        showResultLoading();
+        showScreen("result");
+
+        try {
+            const response = await fetch(
+                `${apiBaseUrl}/recommend`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(state.answers),
+                }
+            );
+
+            let payload = null;
+
+            try {
+                payload = await response.json();
+            } catch {
+                payload = null;
+            }
+
+            if (!response.ok) {
+                const errorMessage =
+                    payload?.detail
+                    || payload?.message
+                    || `추천 API 요청에 실패했습니다. (${response.status})`;
+
+                throw new Error(errorMessage);
+            }
+
+            const recommendations = payload?.recommendations;
+
+            if (!Array.isArray(recommendations)) {
+                throw new Error("추천 API 응답 형식이 올바르지 않습니다.");
+            }
+
+            state.recommendations = recommendations;
+            state.submittedAnswers = { ...state.answers };
+            renderRecommendations(recommendations);
+        } catch (error) {
+            const message = error instanceof Error
+                ? error.message
+                : "추천 결과를 불러오는 중 오류가 발생했습니다.";
+
+            state.resultError = message;
+            showResultError(message);
+        } finally {
+            state.isResultLoading = false;
+        }
+    }
+
+    function handleResultButton() {
+        requestRecommendations();
+    }
+
     function handlePrevious() {
+        if (state.currentQuestion === 8) {
+            moveQuestion(7, "backward");
+            return;
+        }
+
         if (state.currentQuestion === 7) {
             moveQuestion(6, "backward");
             return;
@@ -3699,6 +5416,14 @@ export default function(component) {
             && state.answers.position !== null
         ) {
             moveQuestion(7, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 7
+            && state.answers.priority !== null
+        ) {
+            moveQuestion(8, "forward");
         }
     }
 
@@ -3738,6 +5463,26 @@ export default function(component) {
 
         if (button === nextButton) {
             handleNext();
+            return;
+        }
+
+        if (button === resultButton) {
+            handleResultButton();
+            return;
+        }
+
+        if (button === restartButton) {
+            goHome();
+            return;
+        }
+
+        if (button.classList.contains("result-retry-button")) {
+            requestRecommendations();
+            return;
+        }
+
+        if (button.classList.contains("progress-dot")) {
+            handleProgressDotClick(button);
             return;
         }
 
@@ -3792,6 +5537,11 @@ export default function(component) {
 
         if (button.classList.contains("priority-card")) {
             selectPriority(button);
+            return;
+        }
+
+        if (button.classList.contains("experience-card")) {
+            selectExperience(button);
         }
     }
 
@@ -4014,11 +5764,43 @@ export default function(component) {
         );
     });
 
+    experienceCards.forEach((card) => {
+        const isSelected =
+            card.dataset.experience
+            === state.answers.experience;
+
+        card.classList.toggle(
+            "selected",
+            isSelected
+        );
+
+        card.setAttribute(
+            "aria-checked",
+            String(isSelected)
+        );
+    });
+
     updateRangeUI();
     updateAimUI();
     updateMobilityUI();
     updateAggressionUI();
     updateQuizUI();
+
+    if (
+        state.screen === "result"
+        && Array.isArray(state.recommendations)
+    ) {
+        renderRecommendations(
+            state.recommendations
+        );
+    } else if (
+        state.screen === "result"
+        && state.resultError
+    ) {
+        showResultError(
+            state.resultError
+        );
+    }
 
     return () => {
         abortController.abort();
@@ -4034,6 +5816,8 @@ APP_JS = (
     .replace("__ARROW_RIGHT_GRAY_URI__", json.dumps(ARROW_RIGHT_GRAY_URI))
     .replace("__ARROW_RIGHT_WHITE_URI__", json.dumps(ARROW_RIGHT_WHITE_URI))
     .replace("__ARROW_RIGHT_ORANGE_URI__", json.dumps(ARROW_RIGHT_ORANGE_URI))
+    .replace("__CHECK_ICON_URI__", json.dumps(CHECK_ICON_URI))
+    .replace("__API_BASE_URL__", json.dumps(API_BASE_URL))
 )
 
 

@@ -1,58 +1,17 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
 
 class RecommendRequest(BaseModel):
-    role: Literal[
-        "tank",
-        "damage",
-        "support",
-        "flex",
-    ]
-
-    range: int = Field(
-        ge=1,
-        le=5,
-    )
-
-    aim: int = Field(
-        ge=1,
-        le=5,
-    )
-
-    mobility: int = Field(
-        ge=1,
-        le=5,
-    )
-
-    aggression: int = Field(
-        ge=1,
-        le=5,
-    )
-
-    position: Literal[
-        "frontline",
-        "midline",
-        "backline",
-        "flank",
-        "flexible",
-    ]
-
-    priority: Literal[
-        "damage",
-        "survival",
-        "protection",
-        "healing",
-        "control",
-        "easy",
-    ]
-
-    experience: Literal[
-        "beginner",
-        "intermediate",
-        "advanced",
-    ]
+    role: Literal["tank", "damage", "support", "flex"]
+    range: int = Field(ge=1, le=5)
+    aim: int = Field(ge=1, le=5)
+    mobility: int = Field(ge=1, le=5)
+    aggression: int = Field(ge=1, le=5)
+    position: Literal["frontline", "midline", "backline", "flank", "flexible"]
+    priority: Literal["damage", "survival", "protection", "healing", "control", "easy"]
+    experience: Literal["beginner", "intermediate", "advanced"]
 
 
 class HeroRecommendation(BaseModel):
@@ -65,9 +24,12 @@ class HeroRecommendation(BaseModel):
     reasons: list[str]
     tags: list[str]
     source_url: str
+    score_breakdown: dict[str, float]
+    hero_scores: dict[str, int]
+    priority_metric: str
 
 
 class RecommendResponse(BaseModel):
     message: str
-    received_role: str
+    received_answers: dict[str, Any]
     recommendations: list[HeroRecommendation]
