@@ -1,0 +1,45 @@
+services:
+  back:
+    build:
+      context: .
+      dockerfile: back/Dockerfile
+    container_name: overwatch-back
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=5)"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  front:
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    container_name: overwatch-front
+    ports:
+      - "8501:8501"
+    depends_on:
+      back:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health', timeout=5)"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
