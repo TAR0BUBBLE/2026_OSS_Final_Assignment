@@ -44,7 +44,7 @@ CHECK_ICON_PATH = ASSETS_DIR / "icons" / "check_icon.png"
 # EC2에서 별도 주소가 필요하면 FASTAPI_PUBLIC_URL 환경변수로 지정할 수 있습니다.
 API_BASE_URL = os.getenv("FASTAPI_PUBLIC_URL", "").strip().rstrip("/")
 
-APP_NAME_INFO = "Find Your Hero"
+STUDENT_INFO = "2023204017 최유진"
 
 
 # =========================================================
@@ -154,6 +154,7 @@ CHECK_ICON_URI = image_to_data_uri(CHECK_ICON_PATH)
 # =========================================================
 
 APP_HTML = f"""
+<div id="ow-viewport">
 <main id="ow-app" data-screen="home">
     <img
         class="background-image"
@@ -188,7 +189,7 @@ APP_HTML = f"""
         </button>
 
         <div class="student-badge">
-            {APP_NAME_INFO}
+            {STUDENT_INFO}
         </div>
     </header>
 
@@ -876,6 +877,7 @@ APP_HTML = f"""
         </button>
     </section>
 </main>
+</div>
 """
 
 
@@ -921,24 +923,46 @@ button,
     -webkit-tap-highlight-color: transparent;
 }
 
-#ow-app {
+#ow-viewport {
     position: fixed;
     inset: 0;
     z-index: 99999;
 
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    background: #0a1420;
+}
+
+#ow-app {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 1920px;
+    height: 1080px;
 
     overflow: hidden;
 
     color: #ffffff;
     background: #0a1420;
 
+    opacity: 0;
+    transform-origin: top left;
+    will-change: transform;
+
     font-family:
         Arial,
         "Noto Sans KR",
         "Apple SD Gothic Neo",
         sans-serif;
+
+    transition: opacity 120ms ease;
+}
+
+#ow-viewport.is-fitted #ow-app {
+    opacity: 1;
 }
 
 .background-image,
@@ -1002,11 +1026,11 @@ button,
     position: absolute;
     z-index: 30;
 
-    top: 2.3vh;
-    left: 2.7vw;
-    right: 2.7vw;
+    top: 24.84px;
+    left: 51.84px;
+    right: 51.84px;
 
-    height: 10.8vh;
+    height: 116.64px;
     min-height: 94px;
     max-height: 116px;
 
@@ -1067,7 +1091,7 @@ button,
 .brand-title {
     color: #050505;
 
-    font-size: clamp(27px, 1.85vw, 36px);
+    font-size: clamp(27px, 35.52px, 36px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -1.1px;
@@ -1090,7 +1114,7 @@ button,
 
     border-radius: 16px;
 
-    font-size: clamp(22px, 1.5vw, 30px);
+    font-size: clamp(22px, 28.8px, 30px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -0.7px;
@@ -1106,11 +1130,11 @@ button,
     position: absolute;
     z-index: 5;
 
-    right: -0.5vw;
-    bottom: -1.3vh;
+    right: -9.6px;
+    bottom: -14.04px;
 
-    width: min(45.5vw, 875px);
-    max-height: 89vh;
+    width: min(873.6px, 875px);
+    max-height: 961.2px;
 
     object-fit: contain;
     object-position: right bottom;
@@ -1219,10 +1243,10 @@ button,
 .home-wordmark {
     position: absolute;
 
-    top: 24.7vh;
+    top: 266.76px;
     left: 50%;
 
-    width: min(63vw, 1210px);
+    width: min(1209.6px, 1210px);
     max-height: 155px;
 
     object-fit: contain;
@@ -1236,7 +1260,7 @@ button,
 .home-title {
     position: absolute;
 
-    top: 48.5vh;
+    top: 523.8px;
     left: 50%;
 
     margin: 0;
@@ -1245,7 +1269,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(50px, 4vw, 78px);
+    font-size: clamp(50px, 76.8px, 78px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -2.5px;
@@ -1261,7 +1285,7 @@ button,
 .home-description {
     position: absolute;
 
-    top: 59.7vh;
+    top: 644.76px;
     left: 50%;
 
     width: 90%;
@@ -1271,7 +1295,7 @@ button,
 
     color: rgba(255, 255, 255, 0.76);
 
-    font-size: clamp(23px, 1.9vw, 37px);
+    font-size: clamp(23px, 36.48px, 37px);
     line-height: 1.25;
     font-weight: 700;
     letter-spacing: -1.5px;
@@ -1286,7 +1310,7 @@ button,
 .home-start-button {
     position: absolute;
 
-    top: 79.5vh;
+    top: 858.6px;
     left: 50%;
 
     width: 280px;
@@ -1317,12 +1341,12 @@ button,
 .welcome-copy {
     position: absolute;
 
-    top: 23.5vh;
-    left: 6.1vw;
+    top: 253.8px;
+    left: 117.12px;
 
     z-index: 8;
 
-    width: 52vw;
+    width: 998.4px;
     max-width: 950px;
 }
 
@@ -1359,7 +1383,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(47px, 3.75vw, 72px);
+    font-size: clamp(47px, 72px, 72px);
     line-height: 1.24;
     font-weight: 800;
     letter-spacing: -3px;
@@ -1373,7 +1397,7 @@ button,
 
     color: rgba(255, 255, 255, 0.92);
 
-    font-size: clamp(25px, 2vw, 38px);
+    font-size: clamp(25px, 38.4px, 38px);
     line-height: 1.48;
     font-weight: 600;
     letter-spacing: -1.7px;
@@ -1385,8 +1409,8 @@ button,
 .welcome-start-button {
     position: absolute;
 
-    left: 6.1vw;
-    bottom: 12.9vh;
+    left: 117.12px;
+    bottom: 139.32px;
 
     z-index: 8;
 
@@ -1409,12 +1433,12 @@ button,
 
     z-index: 10;
 
-    top: 21.5vh;
-    left: 6.1vw;
+    top: 232.2px;
+    left: 117.12px;
 
-    width: 58vw;
+    width: 1113.6px;
     max-width: 1115px;
-    height: 66vh;
+    height: 712.8px;
 
     overflow: visible;
 }
@@ -1512,7 +1536,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(46px, 3.65vw, 70px);
+    font-size: clamp(46px, 70.08px, 70px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -2.4px;
@@ -1527,7 +1551,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(25px, 1.9vw, 36px);
+    font-size: clamp(25px, 36.48px, 36px);
     line-height: 1.35;
     font-weight: 600;
     letter-spacing: -1.4px;
@@ -1680,7 +1704,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(22px, 1.65vw, 32px);
+    font-size: clamp(22px, 31.68px, 32px);
     line-height: 1;
     font-weight: 900;
     letter-spacing: 1.4px;
@@ -1697,7 +1721,7 @@ button,
 
     color: var(--muted-white);
 
-    font-size: clamp(14px, 0.95vw, 18px);
+    font-size: clamp(14px, 18.24px, 18px);
     line-height: 1.4;
     font-weight: 500;
     letter-spacing: -0.4px;
@@ -1734,7 +1758,7 @@ button,
     background: transparent;
     border: 0;
 
-    font-size: clamp(25px, 1.75vw, 34px);
+    font-size: clamp(25px, 33.6px, 34px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -1px;
@@ -1903,7 +1927,7 @@ button,
 
     color: rgba(255, 255, 255, 0.65);
 
-    font-size: clamp(13px, 0.9vw, 17px);
+    font-size: clamp(13px, 17.28px, 17px);
     line-height: 1.4;
     font-weight: 500;
     letter-spacing: -0.4px;
@@ -2008,7 +2032,7 @@ button,
         0 10px 24px
         rgba(0, 0, 0, 0.14);
 
-    font-size: clamp(17px, 1.08vw, 22px);
+    font-size: clamp(17px, 20.736px, 22px);
     line-height: 1.35;
     font-weight: 700;
     letter-spacing: -0.6px;
@@ -2138,7 +2162,7 @@ button,
         0 10px 24px
         rgba(0, 0, 0, 0.14);
 
-    font-size: clamp(17px, 1.08vw, 22px);
+    font-size: clamp(17px, 20.736px, 22px);
     line-height: 1.35;
     font-weight: 700;
     letter-spacing: -0.6px;
@@ -2307,7 +2331,7 @@ button,
     z-index: 2;
     flex-shrink: 0;
 
-    font-size: clamp(18px, 1.18vw, 24px);
+    font-size: clamp(18px, 22.656px, 24px);
     line-height: 1.2;
     font-weight: 800;
     letter-spacing: -0.6px;
@@ -2366,8 +2390,8 @@ button,
     position: absolute;
     z-index: 18;
 
-    left: calc(6.1vw + min(29vw, 557.5px));
-    bottom: 15.8vh;
+    left: calc(117.12px + min(556.8px, 557.5px));
+    bottom: 170.64px;
 
     width: 280px;
     height: 104px;
@@ -2384,7 +2408,7 @@ button,
     border: 0;
     border-radius: 0;
 
-    font-size: clamp(26px, 1.8vw, 36px);
+    font-size: clamp(26px, 34.56px, 36px);
     line-height: 1;
     font-weight: 800;
     letter-spacing: -1px;
@@ -2450,10 +2474,10 @@ button,
     position: absolute;
     z-index: 12;
 
-    top: 18.2vh;
-    left: 9.5vw;
+    top: 196.56px;
+    left: 182.4px;
 
-    width: min(48.5vw, 930px);
+    width: min(931.2px, 930px);
 
     text-align: center;
 }
@@ -2463,7 +2487,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(44px, 3.55vw, 68px);
+    font-size: clamp(44px, 68.16px, 68px);
     line-height: 1.04;
     font-weight: 850;
     letter-spacing: -3px;
@@ -2482,7 +2506,7 @@ button,
 
     color: rgba(255, 255, 255, 0.80);
 
-    font-size: clamp(19px, 1.42vw, 28px);
+    font-size: clamp(19px, 27.264px, 28px);
     line-height: 1.35;
     font-weight: 650;
     letter-spacing: -1px;
@@ -2492,11 +2516,11 @@ button,
     position: absolute;
     z-index: 13;
 
-    top: 36.5vh;
-    left: 9.5vw;
+    top: 394.2px;
+    left: 182.4px;
 
-    width: min(48.5vw, 930px);
-    height: 42.5vh;
+    width: min(931.2px, 930px);
+    height: 459px;
 
     min-height: 390px;
     max-height: 500px;
@@ -2595,14 +2619,14 @@ button,
 .result-loading strong,
 .result-error strong {
     color: #ffffff;
-    font-size: clamp(20px, 1.35vw, 27px);
+    font-size: clamp(20px, 25.92px, 27px);
 }
 
 .result-loading span:last-child,
 .result-error p {
     margin: 0;
 
-    font-size: clamp(14px, 0.95vw, 18px);
+    font-size: clamp(14px, 18.24px, 18px);
     text-align: center;
 }
 
@@ -2869,7 +2893,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(25px, 1.78vw, 34px);
+    font-size: clamp(25px, 34.176px, 34px);
     line-height: 1.1;
     font-weight: 900;
     letter-spacing: 0.7px;
@@ -2881,7 +2905,7 @@ button,
 .result-hero-name-ko {
     color: rgba(255, 255, 255, 0.68);
 
-    font-size: clamp(17px, 1.05vw, 21px);
+    font-size: clamp(17px, 20.16px, 21px);
     font-weight: 750;
 
     white-space: nowrap;
@@ -2932,7 +2956,7 @@ button,
 
     color: rgba(255, 255, 255, 0.88);
 
-    font-size: clamp(17px, 1.08vw, 21px);
+    font-size: clamp(17px, 20.736px, 21px);
     line-height: 1.7;
     font-weight: 620;
     letter-spacing: -0.3px;
@@ -2975,7 +2999,7 @@ button,
 
     color: rgba(255, 255, 255, 0.72);
 
-    font-size: clamp(14px, 0.92vw, 18px);
+    font-size: clamp(14px, 17.664px, 18px);
     line-height: 1.5;
 }
 
@@ -3042,7 +3066,7 @@ button,
 
     color: #ffffff;
 
-    font-size: clamp(20px, 1.28vw, 25px);
+    font-size: clamp(20px, 24.576px, 25px);
     line-height: 1.1;
     font-weight: 900;
 
@@ -3078,8 +3102,8 @@ button,
 .result-restart-button {
     position: absolute;
 
-    left: calc(9.5vw + min(24.25vw, 465px));
-    bottom: 5.9vh;
+    left: calc(182.4px + min(465.6px, 465px));
+    bottom: 63.72px;
 
     width: 280px;
     height: 104px;
@@ -3154,10 +3178,10 @@ button,
 
     z-index: 16;
 
-    left: 6.1vw;
-    bottom: 6.7vh;
+    left: 117.12px;
+    bottom: 72.36px;
 
-    width: 58vw;
+    width: 1113.6px;
     max-width: 1115px;
 
     display: grid;
@@ -3397,510 +3421,13 @@ button,
 }
 
 /* ========================================================
-   반응형
+   고정 디자인 캔버스
+
+   1920 × 1080 기준으로 모든 요소를 배치한 뒤, JavaScript가
+   브라우저의 실제 표시 영역에 맞게 캔버스 전체를 동일 비율로
+   축소 또는 확대합니다. 따라서 화면 크기가 달라도 요소 간
+   비율과 중심축이 유지됩니다.
 ======================================================== */
-
-@media (max-width: 1300px) {
-    .question-viewport {
-        top: 20vh;
-        left: 5vw;
-
-        width: 65vw;
-    }
-
-    .quiz-navigation {
-        left: 5vw;
-        width: 65vw;
-        bottom: 4vh;
-    }
-
-    .role-grid {
-        margin-top: 50px;
-    }
-
-    .position-grid {
-        margin-inline: auto;
-        width: min(650px, 100%);
-        gap: 15px;
-    }
-
-    .position-card {
-        min-height: 70px;
-        padding: 0 30px;
-    }
-
-    .priority-grid {
-        width: min(620px, 100%);
-        gap: 18px 22px;
-    }
-
-    .priority-card {
-        min-height: 74px;
-        padding: 0 30px;
-    }
-
-    .experience-grid {
-        width: min(650px, 100%);
-        gap: 16px;
-    }
-
-    .experience-card {
-        min-height: 74px;
-        padding: 14px 30px;
-    }
-
-    .result-button {
-        left: calc(5vw + min(32.5vw, 557.5px));
-        width: 250px;
-        bottom: 13.6vh;
-        height: 90px;
-    }
-
-    .role-card {
-        height: 310px;
-        padding-top: 54px;
-    }
-
-    .character-image {
-        right: -10vw;
-        width: 54vw;
-    }
-}
-
-@media (max-width: 950px) {
-    .app-header {
-        left: 18px;
-        right: 18px;
-
-        min-height: 82px;
-
-        padding:
-            0 15px
-            0 20px;
-
-        border-radius: 18px;
-    }
-
-    .brand-button {
-        gap: 14px;
-    }
-
-    .brand-symbol {
-        width: 54px;
-        height: 54px;
-    }
-
-    .brand-title {
-        font-size: 22px;
-    }
-
-    .student-badge {
-        min-width: auto;
-        height: 58px;
-
-        padding: 0 16px;
-
-        font-size: 17px;
-
-        border-radius: 13px;
-    }
-
-    .home-wordmark {
-        width: 78vw;
-    }
-
-    .home-title {
-        font-size: 48px;
-    }
-
-    .home-description {
-        width: 88%;
-        font-size: 24px;
-        white-space: normal;
-    }
-
-    .home-start-button {
-        width: 230px;
-        height: 86px;
-
-        font-size: 26px;
-    }
-
-    .welcome-copy {
-        top: 22vh;
-        left: 6vw;
-        width: 67vw;
-    }
-
-    .welcome-title {
-        font-size: 42px;
-    }
-
-    .welcome-description {
-        font-size: 23px;
-    }
-
-    .welcome-start-button {
-        left: 6vw;
-        bottom: 11vh;
-
-        width: 240px;
-        height: 92px;
-
-        font-size: 28px;
-    }
-
-    .question-viewport {
-        top: 19vh;
-        left: 5vw;
-
-        width: 90vw;
-    }
-
-    .quiz-navigation {
-        left: 5vw;
-        width: 90vw;
-        bottom: 3.3vh;
-    }
-
-    .character-image {
-        right: -26vw;
-        width: 74vw;
-        opacity: 0 !important;
-    }
-
-    #ow-app[data-screen="welcome"] .character-image,
-    #ow-app[data-screen="quiz"] .character-image {
-        opacity: 0.45 !important;
-    }
-
-    .role-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .position-grid {
-        margin-inline: auto;
-        width: min(680px, 76vw);
-        gap: 13px;
-    }
-
-    .position-card {
-        min-height: 64px;
-        padding: 0 24px;
-        font-size: 17px;
-    }
-
-    .priority-grid {
-        margin-top: 70px;
-        width: min(680px, 76vw);
-        gap: 14px 18px;
-    }
-
-    .priority-card {
-        min-height: 66px;
-        padding: 0 24px;
-        font-size: 17px;
-    }
-
-    .role-card {
-        height: 255px;
-        padding-top: 32px;
-    }
-
-    .role-icon-circle {
-        width: 76px;
-        height: 76px;
-    }
-
-    .role-icon {
-        width: 42px;
-        height: 42px;
-    }
-
-    .role-card-title {
-        margin-top: 22px;
-    }
-}
-
-@media (max-width: 620px) {
-    .brand-title {
-        font-size: 16px;
-    }
-
-    .student-badge {
-        max-width: 150px;
-        font-size: 13px;
-        text-align: center;
-    }
-
-    .home-title {
-        font-size: 39px;
-    }
-
-    .home-description {
-        font-size: 20px;
-    }
-
-    .welcome-copy {
-        top: 21vh;
-        width: 86vw;
-    }
-
-    .welcome-title {
-        font-size: 35px;
-    }
-
-    .welcome-description {
-        margin-top: 25px;
-        font-size: 20px;
-    }
-
-    .question-viewport {
-        top: 17vh;
-    }
-
-    .question-title {
-        font-size: 36px;
-    }
-
-    .question-description {
-        margin-top: 22px;
-        font-size: 20px;
-    }
-
-    .role-grid {
-        margin-top: 30px;
-        gap: 10px;
-    }
-
-    .role-card {
-        height: 220px;
-        padding:
-            24px 10px
-            20px;
-    }
-
-    .role-icon-circle {
-        width: 64px;
-        height: 64px;
-    }
-
-    .role-icon {
-        width: 35px;
-        height: 35px;
-    }
-
-    .role-card-title {
-        font-size: 18px;
-    }
-
-    .role-card-description {
-        margin-top: 12px;
-        font-size: 12px;
-    }
-
-    .position-grid {
-        margin-top: 26px;
-        margin-inline: auto;
-        width: 90vw;
-        gap: 9px;
-    }
-
-    .position-card {
-        min-height: 53px;
-        padding: 0 15px;
-        border-radius: 10px;
-        font-size: 13px;
-    }
-
-    .priority-grid {
-        margin-top: 34px;
-        width: 90vw;
-        grid-template-columns: 1fr;
-        gap: 9px;
-    }
-
-    .priority-card {
-        min-height: 52px;
-        padding: 0 16px;
-        border-radius: 10px;
-        font-size: 13px;
-    }
-
-    .quiz-navigation {
-        grid-template-columns:
-            56px
-            minmax(180px, 1fr)
-            56px;
-
-        gap: 10px;
-    }
-
-    .arrow-button,
-    .arrow-single,
-    .arrow-default,
-    .arrow-hover {
-        width: 54px;
-        height: 54px;
-    }
-
-    .progress-dots {
-        gap: 11px;
-    }
-
-    .progress-dot {
-        width: 14px;
-        height: 14px;
-    }
-}
-
-
-@media (max-width: 1300px) {
-    .result-heading {
-        left: 7vw;
-        width: 57vw;
-    }
-
-    .result-scroll-shell {
-        left: 7vw;
-        width: 57vw;
-    }
-
-    .primary-recommendation {
-        grid-template-columns: 245px minmax(0, 1fr);
-    }
-
-    .primary-image-wrap {
-        width: 245px;
-    }
-
-    .compact-recommendation {
-        grid-template-columns: 145px minmax(0, 1fr);
-    }
-
-    .compact-image-wrap {
-        width: 145px;
-    }
-
-    .result-restart-button {
-        left: 35.5vw;
-    }
-}
-
-@media (max-width: 950px) {
-    .result-heading {
-        top: 17vh;
-        left: 5vw;
-        width: 90vw;
-    }
-
-    .result-title {
-        font-size: 45px;
-    }
-
-    .result-scroll-shell {
-        top: 32vh;
-        left: 5vw;
-        width: 90vw;
-        height: 51vh;
-        max-height: none;
-    }
-
-    .primary-recommendation {
-        grid-template-columns: 220px minmax(0, 1fr);
-        gap: 24px;
-    }
-
-    .primary-image-wrap {
-        width: 220px;
-        height: 270px;
-    }
-
-    .secondary-result-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .compact-recommendation {
-        grid-template-columns: 180px minmax(0, 1fr);
-    }
-
-    .compact-image-wrap {
-        width: 180px;
-    }
-
-    .result-restart-button {
-        left: 50%;
-        bottom: 3.5vh;
-        width: 230px;
-        height: 82px;
-        font-size: 27px;
-    }
-}
-
-@media (max-width: 620px) {
-    .result-title {
-        font-size: 34px;
-        letter-spacing: -1.8px;
-    }
-
-    .result-description {
-        margin-top: 17px;
-        font-size: 17px;
-    }
-
-    .result-scroll-shell {
-        top: 30vh;
-        height: 55vh;
-    }
-
-    .primary-recommendation {
-        padding: 18px;
-        grid-template-columns: 1fr;
-    }
-
-    .primary-image-wrap {
-        width: 100%;
-        height: 240px;
-    }
-
-    .result-hero-heading {
-        align-items: flex-start;
-    }
-
-    .result-hero-name-block {
-        display: block;
-    }
-
-    .result-hero-name-ko {
-        display: block;
-        margin-top: 7px;
-    }
-
-    .match-pill {
-        min-width: 116px;
-        height: 41px;
-        padding: 0 13px;
-        font-size: 14px;
-    }
-
-    .compact-recommendation {
-        padding: 16px;
-        grid-template-columns: 122px minmax(0, 1fr);
-    }
-
-    .compact-image-wrap {
-        width: 122px;
-        height: 155px;
-    }
-
-    .result-restart-button {
-        bottom: 2.2vh;
-        width: 205px;
-        height: 70px;
-        font-size: 23px;
-    }
-}
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -3923,9 +3450,55 @@ APP_JS_TEMPLATE = r"""
 export default function(component) {
     const { parentElement } = component;
 
+    const viewport = parentElement.querySelector("#ow-viewport");
     const app = parentElement.querySelector("#ow-app");
-    if (!app) {
+
+    if (!viewport || !app) {
         return;
+    }
+
+    const DESIGN_WIDTH = 1920;
+    const DESIGN_HEIGHT = 1080;
+    const viewportResizeController = new AbortController();
+
+    function fitDesignCanvas() {
+        const viewportWidth = Math.max(1, window.innerWidth);
+        const viewportHeight = Math.max(1, window.innerHeight);
+
+        const scale = Math.max(
+            0.1,
+            Math.min(
+                viewportWidth / DESIGN_WIDTH,
+                viewportHeight / DESIGN_HEIGHT
+            )
+        );
+
+        const renderedWidth = DESIGN_WIDTH * scale;
+        const renderedHeight = DESIGN_HEIGHT * scale;
+        const offsetX = (viewportWidth - renderedWidth) / 2;
+        const offsetY = (viewportHeight - renderedHeight) / 2;
+
+        app.style.transform =
+            `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scale})`;
+
+        app.dataset.viewportScale = String(scale);
+        viewport.classList.add("is-fitted");
+    }
+
+    fitDesignCanvas();
+
+    window.addEventListener(
+        "resize",
+        fitDesignCanvas,
+        { signal: viewportResizeController.signal }
+    );
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener(
+            "resize",
+            fitDesignCanvas,
+            { signal: viewportResizeController.signal }
+        );
     }
 
 
@@ -5804,6 +5377,7 @@ export default function(component) {
 
     return () => {
         abortController.abort();
+        viewportResizeController.abort();
     };
 }
 """
@@ -5840,7 +5414,7 @@ def main() -> None:
     app_component(
         key="overwatch-recommendation-shell",
         width="stretch",
-        height=1000,
+        height=1080,
     )
 
 
