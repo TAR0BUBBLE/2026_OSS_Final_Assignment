@@ -1512,6 +1512,33 @@ button,
 
     -webkit-appearance: none;
     appearance: none;
+
+    will-change: filter;
+    transition:
+        filter 180ms ease,
+        opacity 180ms ease;
+}
+
+.range-slider.is-animating {
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(237, 108, 37, 0.24)
+        );
+}
+
+.range-slider.is-settling::-webkit-slider-thumb {
+    animation:
+        slider-snap-feedback
+        240ms
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.range-slider.is-settling::-moz-range-thumb {
+    animation:
+        slider-snap-feedback
+        240ms
+        cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .range-slider::-webkit-slider-runnable-track {
@@ -1784,6 +1811,35 @@ button,
 /* ========================================================
    애니메이션
 ======================================================== */
+
+@keyframes slider-snap-feedback {
+    0% {
+        transform: scale(1);
+        box-shadow:
+            0 7px 18px
+            rgba(0, 0, 0, 0.28);
+    }
+
+    48% {
+        transform: scale(1.18);
+        box-shadow:
+            0 0 0 9px
+            rgba(237, 108, 37, 0.16),
+            0 10px 25px
+            rgba(237, 108, 37, 0.38);
+    }
+
+    72% {
+        transform: scale(0.96);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 7px 18px
+            rgba(0, 0, 0, 0.28);
+    }
+}
 
 @keyframes float-up {
     from {
@@ -2235,6 +2291,9 @@ export default function(component) {
     state.answers.mobility ??= null;
     state.answers.aggression ??= null;
 
+    const sliderAnimationFrames = new WeakMap();
+    const sliderOriginalSteps = new WeakMap();
+
     function clearAnimationClass(element, className, timeout = 900) {
         window.setTimeout(() => {
             element.classList.remove(className);
@@ -2245,6 +2304,181 @@ export default function(component) {
         element.classList.remove(className);
         void element.offsetWidth;
         element.classList.add(className);
+    }
+
+    function triggerSliderSnapFeedback(slider) {
+        slider.classList.remove("is-settling");
+        void slider.offsetWidth;
+        slider.classList.add("is-settling");
+
+        window.setTimeout(() => {
+            slider.classList.remove("is-settling");
+        }, 260);
+    }
+
+    function cancelSliderAnimation(slider) {
+        const animationFrame =
+            sliderAnimationFrames.get(slider);
+
+        if (animationFrame !== undefined) {
+            window.cancelAnimationFrame(animationFrame);
+            sliderAnimationFrames.delete(slider);
+        }
+
+        const originalStep =
+            sliderOriginalSteps.get(slider);
+
+        if (originalStep !== undefined) {
+            slider.step = originalStep;
+            sliderOriginalSteps.delete(slider);
+        }
+
+        slider.classList.remove("is-animating");
+    }
+
+    function animateSliderTo(
+        slider,
+        targetValue,
+        commitValue
+    ) {
+        cancelSliderAnimation(slider);
+
+        const startValue =
+            Number(slider.value);
+
+        const finalValue =
+            Number(targetValue);
+
+        if (
+            !Number.isFinite(startValue)
+            || !Number.isFinite(finalValue)
+        ) {
+            return;
+        }
+
+        if (startValue === finalValue) {
+            commitValue(finalValue);
+            triggerSliderSnapFeedback(slider);
+            return;
+        }
+
+        const originalStep =
+            slider.step || "1";
+
+        sliderOriginalSteps.set(
+            slider,
+            originalStep
+        );
+
+        /*
+        애니메이션 도중에는 소수점 값을 허용해서
+        손잡이가 구간 사이를 부드럽게 이동하도록 합니다.
+        마지막에는 원래 step을 복구하고 정확한 점수에 고정합니다.
+        */
+        slider.step = "any";
+        slider.classList.add("is-animating");
+
+        const distance =
+            Math.abs(finalValue - startValue);
+
+        const duration =
+            220 + distance * 55;
+
+        const startedAt =
+            performance.now();
+
+        function animateFrame(currentTime) {
+            const progress =
+                Math.min(
+                    (currentTime - startedAt) / duration,
+                    1
+                );
+
+            const easedProgress =
+                1 - Math.pow(1 - progress, 3);
+
+            const animatedValue =
+                startValue
+                + (
+                    finalValue - startValue
+                ) * easedProgress;
+
+            slider.value =
+                String(animatedValue);
+
+            if (progress < 1) {
+                const nextFrame =
+                    window.requestAnimationFrame(
+                        animateFrame
+                    );
+
+                sliderAnimationFrames.set(
+                    slider,
+                    nextFrame
+                );
+
+                return;
+            }
+
+            slider.step = originalStep;
+            slider.value = String(finalValue);
+
+            sliderOriginalSteps.delete(slider);
+            sliderAnimationFrames.delete(slider);
+            slider.classList.remove("is-animating");
+
+            commitValue(finalValue);
+            triggerSliderSnapFeedback(slider);
+        }
+
+        const firstFrame =
+            window.requestAnimationFrame(
+                animateFrame
+            );
+
+        sliderAnimationFrames.set(
+            slider,
+            firstFrame
+        );
+    }
+
+    function ensureDefaultAnswerForQuestion(
+        questionNumber
+    ) {
+        if (
+            questionNumber === 2
+            && state.answers.range === null
+        ) {
+            state.answers.range = 3;
+            updateRangeUI();
+            return;
+        }
+
+        if (
+            questionNumber === 3
+            && state.answers.aim === null
+        ) {
+            state.answers.aim = 3;
+            updateAimUI();
+            return;
+        }
+
+        if (
+            questionNumber === 4
+            && state.answers.mobility === null
+        ) {
+            state.answers.mobility = 3;
+            updateMobilityUI();
+            return;
+        }
+
+        if (
+            questionNumber === 5
+            && state.answers.aggression === null
+        ) {
+            state.answers.aggression = 3;
+            updateAggressionUI();
+        }
     }
 
     function showScreen(screenName) {
@@ -2317,6 +2551,10 @@ export default function(component) {
     }
 
     function setQuestionInstantly(questionNumber) {
+        ensureDefaultAnswerForQuestion(
+            questionNumber
+        );
+
         Object.entries(questions).forEach(([number, panel]) => {
             const isCurrent = Number(number) === questionNumber;
 
@@ -2346,6 +2584,10 @@ export default function(component) {
         }
 
         state.isQuestionAnimating = true;
+
+        ensureDefaultAnswerForQuestion(
+            nextQuestion
+        );
 
         const currentPanel =
             questions[state.currentQuestion];
@@ -2478,32 +2720,33 @@ export default function(component) {
         const previousEnabled =
             state.currentQuestion > 1;
 
-        let nextEnabled = false;
+        const answerReadyByQuestion = {
+            1: state.answers.role !== null,
+            2: true,
+            3: true,
+            4: true,
+            5: true,
+        };
 
-        if (state.currentQuestion === 1) {
-            nextEnabled =
-                state.answers.role !== null;
-        }
+        /*
+        슬라이더 질문은 화면에 들어오는 순간 기본값 3이
+        실제 답변으로 저장되므로 별도 클릭 없이도 이동할 수 있습니다.
+        다만 다음 질문 화면이 실제로 존재할 때만 화살표를 활성화합니다.
+        */
+        const hasNextQuestion =
+            Boolean(
+                questions[
+                    state.currentQuestion + 1
+                ]
+            );
 
-        if (state.currentQuestion === 2) {
-            nextEnabled =
-                state.answers.range !== null;
-        }
-
-        if (state.currentQuestion === 3) {
-            nextEnabled =
-                state.answers.aim !== null;
-        }
-
-        if (state.currentQuestion === 4) {
-            nextEnabled =
-                state.answers.mobility !== null;
-        }
-
-        // Q6가 아직 없으므로 Q5의 다음 버튼은 비활성화합니다.
-        if (state.currentQuestion === 5) {
-            nextEnabled = false;
-        }
+        const nextEnabled =
+            hasNextQuestion
+            && Boolean(
+                answerReadyByQuestion[
+                    state.currentQuestion
+                ]
+            );
 
         setArrowContent(
             previousButton,
@@ -2877,23 +3120,59 @@ export default function(component) {
             button.classList.contains("range-option")
             && button.dataset.range
         ) {
-            selectRange(button.dataset.range);
+            animateSliderTo(
+                rangeSlider,
+                button.dataset.range,
+                selectRange
+            );
             return;
         }
 
         if (button.classList.contains("aim-option")) {
-            selectAim(button.dataset.aim);
+            animateSliderTo(
+                aimSlider,
+                button.dataset.aim,
+                selectAim
+            );
             return;
         }
 
         if (button.classList.contains("mobility-option")) {
-            selectMobility(button.dataset.mobility);
+            animateSliderTo(
+                mobilitySlider,
+                button.dataset.mobility,
+                selectMobility
+            );
             return;
         }
 
         if (button.classList.contains("aggression-option")) {
-            selectAggression(button.dataset.aggression);
+            animateSliderTo(
+                aggressionSlider,
+                button.dataset.aggression,
+                selectAggression
+            );
         }
+    }
+
+    function getSliderCommitFunction(slider) {
+        if (slider === rangeSlider) {
+            return selectRange;
+        }
+
+        if (slider === aimSlider) {
+            return selectAim;
+        }
+
+        if (slider === mobilitySlider) {
+            return selectMobility;
+        }
+
+        if (slider === aggressionSlider) {
+            return selectAggression;
+        }
+
+        return null;
     }
 
     function handleAppInput(event) {
@@ -2906,24 +3185,116 @@ export default function(component) {
             return;
         }
 
-        if (target === rangeSlider) {
-            selectRange(target.value);
+        /*
+        마우스나 터치로 드래그하는 동안에는 step="any"를 사용해
+        손잡이가 연속적으로 움직이게 합니다.
+        실제 점수 저장은 드래그가 끝난 뒤 가장 가까운 단계로
+        스냅될 때 한 번만 수행합니다.
+        */
+        if (target.dataset.dragging === "true") {
             return;
         }
 
-        if (target === aimSlider) {
-            selectAim(target.value);
+        const commitValue =
+            getSliderCommitFunction(target);
+
+        if (commitValue) {
+            commitValue(target.value);
+        }
+    }
+
+    function handleSliderPointerDown(event) {
+        const target =
+            event.target instanceof HTMLInputElement
+                ? event.target
+                : null;
+
+        if (
+            !target
+            || !target.classList.contains(
+                "range-slider"
+            )
+        ) {
             return;
         }
 
-        if (target === mobilitySlider) {
-            selectMobility(target.value);
+        cancelSliderAnimation(target);
+
+        const originalStep =
+            target.step || "1";
+
+        sliderOriginalSteps.set(
+            target,
+            originalStep
+        );
+
+        target.dataset.dragging = "true";
+        target.step = "any";
+        target.classList.add("is-animating");
+    }
+
+    function handleSliderChange(event) {
+        const target =
+            event.target instanceof HTMLInputElement
+                ? event.target
+                : null;
+
+        if (
+            !target
+            || !target.classList.contains(
+                "range-slider"
+            )
+        ) {
             return;
         }
 
-        if (target === aggressionSlider) {
-            selectAggression(target.value);
+        const commitValue =
+            getSliderCommitFunction(target);
+
+        if (!commitValue) {
+            return;
         }
+
+        const originalStep =
+            Number(
+                sliderOriginalSteps.get(target)
+                ?? target.step
+                ?? 1
+            );
+
+        const minimum =
+            Number(target.min);
+
+        const maximum =
+            Number(target.max);
+
+        const rawValue =
+            Number(target.value);
+
+        const snappedValue =
+            Math.min(
+                maximum,
+                Math.max(
+                    minimum,
+                    minimum
+                    + Math.round(
+                        (rawValue - minimum)
+                        / originalStep
+                    ) * originalStep
+                )
+            );
+
+        delete target.dataset.dragging;
+
+        /*
+        드래그가 끝나는 순간 가장 가까운 유효 점수로
+        짧게 끌려가며 고정되는 스냅 애니메이션을 실행합니다.
+        */
+        animateSliderTo(
+            target,
+            snappedValue,
+            commitValue
+        );
     }
 
     const abortController = new AbortController();
@@ -2937,6 +3308,18 @@ export default function(component) {
     app.addEventListener(
         "input",
         handleAppInput,
+        { signal: abortController.signal }
+    );
+
+    app.addEventListener(
+        "pointerdown",
+        handleSliderPointerDown,
+        { signal: abortController.signal }
+    );
+
+    app.addEventListener(
+        "change",
+        handleSliderChange,
         { signal: abortController.signal }
     );
 
