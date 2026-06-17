@@ -451,6 +451,114 @@ APP_HTML = f"""
                     </div>
                 </div>
             </article>
+
+            <!-- Q4. 기동성 선호도 질문 -->
+            <article id="question-4" class="question-panel question-four-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q4.</span>
+                        <span>기동성 선호도</span>
+                    </h1>
+
+                    <p class="question-description">
+                        빠르게 이동하며 전장을 누비는 플레이를 좋아하나요?
+                    </p>
+                </div>
+
+                <div
+                    class="range-answer mobility-answer"
+                    role="group"
+                    aria-label="기동성 선호도"
+                >
+                    <div class="range-label-row mobility-label-row">
+                        <button
+                            class="range-option mobility-option"
+                            type="button"
+                            data-mobility="1"
+                            aria-pressed="false"
+                        >
+                            안전 위치 유지
+                        </button>
+
+                        <button
+                            class="range-option mobility-option"
+                            type="button"
+                            data-mobility="5"
+                            aria-pressed="false"
+                        >
+                            빠른 전진 침투
+                        </button>
+                    </div>
+
+                    <div class="range-slider-wrapper">
+                        <input
+                            id="mobility-slider"
+                            class="range-slider mobility-slider"
+                            type="range"
+                            min="1"
+                            max="5"
+                            step="1"
+                            value="3"
+                            aria-label="기동성 선호도 선택"
+                            aria-valuetext="선택하지 않음"
+                        />
+                    </div>
+                </div>
+            </article>
+
+            <!-- Q5. 공격적인 플레이 성향 질문 -->
+            <article id="question-5" class="question-panel question-five-panel">
+                <div class="question-copy">
+                    <h1 class="question-title">
+                        <span class="question-number">Q5.</span>
+                        <span>공격적인 플레이 성향</span>
+                    </h1>
+
+                    <p class="question-description">
+                        얼마나 적극적으로 적에게 진입하고 싶나요?
+                    </p>
+                </div>
+
+                <div
+                    class="range-answer aggression-answer"
+                    role="group"
+                    aria-label="공격적인 플레이 성향"
+                >
+                    <div class="range-label-row aggression-label-row">
+                        <button
+                            class="range-option aggression-option"
+                            type="button"
+                            data-aggression="1"
+                            aria-pressed="false"
+                        >
+                            신중하고 안정적
+                        </button>
+
+                        <button
+                            class="range-option aggression-option"
+                            type="button"
+                            data-aggression="5"
+                            aria-pressed="false"
+                        >
+                            과감하고 공격적
+                        </button>
+                    </div>
+
+                    <div class="range-slider-wrapper">
+                        <input
+                            id="aggression-slider"
+                            class="range-slider aggression-slider"
+                            type="range"
+                            min="1"
+                            max="5"
+                            step="1"
+                            value="3"
+                            aria-label="공격적인 플레이 성향 선택"
+                            aria-valuetext="선택하지 않음"
+                        />
+                    </div>
+                </div>
+            </article>
         </div>
 
         <nav class="quiz-navigation" aria-label="질문 이동">
@@ -1523,8 +1631,10 @@ button,
     border-radius: 7px;
 }
 
-/* Q3는 양 끝 설명만 표시합니다. */
-.aim-label-row {
+/* Q3·Q4·Q5는 슬라이더 양 끝의 의미만 표시합니다. */
+.aim-label-row,
+.mobility-label-row,
+.aggression-label-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1532,12 +1642,16 @@ button,
     grid-template-columns: none;
 }
 
-.aim-label-row .aim-option:first-child {
+.aim-label-row .aim-option:first-child,
+.mobility-label-row .mobility-option:first-child,
+.aggression-label-row .aggression-option:first-child {
     justify-self: auto;
     text-align: left;
 }
 
-.aim-label-row .aim-option:last-child {
+.aim-label-row .aim-option:last-child,
+.mobility-label-row .mobility-option:last-child,
+.aggression-label-row .aggression-option:last-child {
     justify-self: auto;
     text-align: right;
 }
@@ -2037,6 +2151,8 @@ export default function(component) {
         1: parentElement.querySelector("#question-1"),
         2: parentElement.querySelector("#question-2"),
         3: parentElement.querySelector("#question-3"),
+        4: parentElement.querySelector("#question-4"),
+        5: parentElement.querySelector("#question-5"),
     };
 
     const homeButton = parentElement.querySelector("#home-button");
@@ -2068,6 +2184,24 @@ export default function(component) {
         )
     );
 
+    const mobilitySlider =
+        parentElement.querySelector("#mobility-slider");
+
+    const mobilityOptions = Array.from(
+        parentElement.querySelectorAll(
+            "#question-4 .mobility-option"
+        )
+    );
+
+    const aggressionSlider =
+        parentElement.querySelector("#aggression-slider");
+
+    const aggressionOptions = Array.from(
+        parentElement.querySelectorAll(
+            "#question-5 .aggression-option"
+        )
+    );
+
     const progressDots = Array.from(
         parentElement.querySelectorAll(".progress-dot")
     );
@@ -2088,6 +2222,8 @@ export default function(component) {
             role: null,
             range: null,
             aim: null,
+            mobility: null,
+            aggression: null,
         },
         isQuestionAnimating: false,
     };
@@ -2096,6 +2232,8 @@ export default function(component) {
     // 기존 상태 객체에 새 질문 값이 없을 때를 대비합니다.
     state.answers.range ??= null;
     state.answers.aim ??= null;
+    state.answers.mobility ??= null;
+    state.answers.aggression ??= null;
 
     function clearAnimationClass(element, className, timeout = 900) {
         window.setTimeout(() => {
@@ -2157,6 +2295,8 @@ export default function(component) {
         state.answers.role = null;
         state.answers.range = null;
         state.answers.aim = null;
+        state.answers.mobility = null;
+        state.answers.aggression = null;
 
         roleCards.forEach((card) => {
             card.classList.remove("selected");
@@ -2165,6 +2305,8 @@ export default function(component) {
 
         updateRangeUI();
         updateAimUI();
+        updateMobilityUI();
+        updateAggressionUI();
         setQuestionInstantly(1);
         updateQuizUI();
     }
@@ -2316,6 +2458,8 @@ export default function(component) {
                 1: state.answers.role !== null,
                 2: state.answers.range !== null,
                 3: state.answers.aim !== null,
+                4: state.answers.mobility !== null,
+                5: state.answers.aggression !== null,
             };
 
             const isCompleted =
@@ -2346,8 +2490,18 @@ export default function(component) {
                 state.answers.range !== null;
         }
 
-        // Q4가 아직 없으므로 Q3의 다음 버튼은 비활성화합니다.
         if (state.currentQuestion === 3) {
+            nextEnabled =
+                state.answers.aim !== null;
+        }
+
+        if (state.currentQuestion === 4) {
+            nextEnabled =
+                state.answers.mobility !== null;
+        }
+
+        // Q6가 아직 없으므로 Q5의 다음 버튼은 비활성화합니다.
+        if (state.currentQuestion === 5) {
             nextEnabled = false;
         }
 
@@ -2505,7 +2659,133 @@ export default function(component) {
         updateQuizUI();
     }
 
+    function getMobilityLabel(value) {
+        const labels = {
+            1: "한 자리를 안정적으로 지키고 싶어요",
+            2: "이동이 많지 않은 플레이를 선호해요",
+            3: "상황에 따라 움직이고 싶어요",
+            4: "빠른 이동과 재배치를 좋아해요",
+            5: "끊임없이 전장을 누비고 싶어요",
+        };
+
+        return labels[value] ?? "선택하지 않음";
+    }
+
+    function updateMobilityUI() {
+        const displayValue =
+            state.answers.mobility ?? 3;
+
+        mobilitySlider.value =
+            String(displayValue);
+
+        mobilitySlider.setAttribute(
+            "aria-valuetext",
+            state.answers.mobility === null
+                ? "선택하지 않음"
+                : getMobilityLabel(displayValue)
+        );
+
+        mobilityOptions.forEach((option) => {
+            const optionValue =
+                Number(option.dataset.mobility);
+
+            const isSelected =
+                state.answers.mobility === optionValue;
+
+            option.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            option.setAttribute(
+                "aria-pressed",
+                String(isSelected)
+            );
+        });
+    }
+
+    function selectMobility(value) {
+        const numericValue = Number(value);
+        const validValues = [1, 2, 3, 4, 5];
+
+        if (!validValues.includes(numericValue)) {
+            return;
+        }
+
+        state.answers.mobility = numericValue;
+        updateMobilityUI();
+        updateQuizUI();
+    }
+
+    function getAggressionLabel(value) {
+        const labels = {
+            1: "안전하게 기다리며 기회를 보고 싶어요",
+            2: "방어적인 플레이를 선호해요",
+            3: "상황에 따라 진입하고 싶어요",
+            4: "적극적으로 교전을 시작하고 싶어요",
+            5: "적진 깊숙이 뛰어들고 싶어요",
+        };
+
+        return labels[value] ?? "선택하지 않음";
+    }
+
+    function updateAggressionUI() {
+        const displayValue =
+            state.answers.aggression ?? 3;
+
+        aggressionSlider.value =
+            String(displayValue);
+
+        aggressionSlider.setAttribute(
+            "aria-valuetext",
+            state.answers.aggression === null
+                ? "선택하지 않음"
+                : getAggressionLabel(displayValue)
+        );
+
+        aggressionOptions.forEach((option) => {
+            const optionValue =
+                Number(option.dataset.aggression);
+
+            const isSelected =
+                state.answers.aggression === optionValue;
+
+            option.classList.toggle(
+                "selected",
+                isSelected
+            );
+
+            option.setAttribute(
+                "aria-pressed",
+                String(isSelected)
+            );
+        });
+    }
+
+    function selectAggression(value) {
+        const numericValue = Number(value);
+        const validValues = [1, 2, 3, 4, 5];
+
+        if (!validValues.includes(numericValue)) {
+            return;
+        }
+
+        state.answers.aggression = numericValue;
+        updateAggressionUI();
+        updateQuizUI();
+    }
+
     function handlePrevious() {
+        if (state.currentQuestion === 5) {
+            moveQuestion(4, "backward");
+            return;
+        }
+
+        if (state.currentQuestion === 4) {
+            moveQuestion(3, "backward");
+            return;
+        }
+
         if (state.currentQuestion === 3) {
             moveQuestion(2, "backward");
             return;
@@ -2530,6 +2810,22 @@ export default function(component) {
             && state.answers.range !== null
         ) {
             moveQuestion(3, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 3
+            && state.answers.aim !== null
+        ) {
+            moveQuestion(4, "forward");
+            return;
+        }
+
+        if (
+            state.currentQuestion === 4
+            && state.answers.mobility !== null
+        ) {
+            moveQuestion(5, "forward");
         }
     }
 
@@ -2587,6 +2883,16 @@ export default function(component) {
 
         if (button.classList.contains("aim-option")) {
             selectAim(button.dataset.aim);
+            return;
+        }
+
+        if (button.classList.contains("mobility-option")) {
+            selectMobility(button.dataset.mobility);
+            return;
+        }
+
+        if (button.classList.contains("aggression-option")) {
+            selectAggression(button.dataset.aggression);
         }
     }
 
@@ -2607,6 +2913,16 @@ export default function(component) {
 
         if (target === aimSlider) {
             selectAim(target.value);
+            return;
+        }
+
+        if (target === mobilitySlider) {
+            selectMobility(target.value);
+            return;
+        }
+
+        if (target === aggressionSlider) {
+            selectAggression(target.value);
         }
     }
 
@@ -2645,6 +2961,8 @@ export default function(component) {
 
     updateRangeUI();
     updateAimUI();
+    updateMobilityUI();
+    updateAggressionUI();
     updateQuizUI();
 
     return () => {
