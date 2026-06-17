@@ -1,3 +1,4 @@
+import mimetypes
 import re
 from pathlib import Path
 
@@ -9,13 +10,14 @@ from back.recommender import recommend_heroes
 from back.schemas import RecommendRequest, RecommendResponse
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-HERO_IMAGE_DIR = PROJECT_ROOT / "front" / "assets" / "heroes"
+UI_ASSET_DIR = (PROJECT_ROOT / "front" / "assets").resolve()
+HERO_IMAGE_DIR = UI_ASSET_DIR / "heroes"
 HERO_ID_PATTERN = re.compile(r"^[a-z0-9_-]+$")
 
 app = FastAPI(
     title="Overwatch Hero Recommendation API",
     description="사용자의 플레이 성향을 바탕으로 오버워치 영웅을 추천하는 API입니다.",
-    version="1.2.0",
+    version="1.3.0",
 )
 
 # Streamlit 화면(8501 또는 EC2의 공개 포트)에서 브라우저가
@@ -39,21 +41,60 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get("/assets/{asset_path:path}", response_class=FileResponse)
+def get_ui_asset(asset_path: str) -> FileResponse:
+    """Streamlit UI에서 사용하는 이미지 파일을 브라우저에 전달합니다."""
+    requested_path = (UI_ASSET_DIR / asset_path).resolve()
+
+    if (
+        requested_path == UI_ASSET_DIR
+        or UI_ASSET_DIR not in requested_path.parents
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="올바르지 않은 에셋 경로입니다.",
+        )
+
+    if not requested_path.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail="에셋 파일을 찾을 수 없습니다.",
+        )
+
+    media_type, _ = mimetypes.guess_type(requested_path.name)
+
+    return FileResponse(
+        path=requested_path,
+        media_type=media_type or "application/octet-stream",
+        headers={
+            "Cache-Control": "public, max-age=604800",
+        },
+    )
+
+
 @app.get("/hero-images/{hero_id}.png", response_class=FileResponse)
 def get_hero_image(hero_id: str) -> FileResponse:
     """프론트엔드 결과 카드에 사용할 로컬 영웅 이미지를 반환합니다."""
     if not HERO_ID_PATTERN.fullmatch(hero_id):
-        raise HTTPException(status_code=400, detail="올바르지 않은 영웅 ID입니다.")
+        raise HTTPException(
+            status_code=400,
+            detail="올바르지 않은 영웅 ID입니다.",
+        )
 
     image_path = HERO_IMAGE_DIR / f"{hero_id}.png"
 
     if not image_path.is_file():
-        raise HTTPException(status_code=404, detail="영웅 이미지를 찾을 수 없습니다.")
+        raise HTTPException(
+            status_code=404,
+            detail="영웅 이미지를 찾을 수 없습니다.",
+        )
 
     return FileResponse(
         path=image_path,
         media_type="image/png",
-        headers={"Cache-Control": "public, max-age=3600"},
+        headers={
+            "Cache-Control": "public, max-age=604800",
+        },
     )
 
 
@@ -67,7 +108,10 @@ def recommend(request: RecommendRequest) -> RecommendResponse:
             top_n=3,
         )
     except ValueError as error:
-        raise HTTPException(status_code=400, detail=str(error)) from error
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        ) from error
 
     return RecommendResponse(
         message="플레이 성향 분석이 완료되었습니다.",

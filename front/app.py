@@ -1,8 +1,5 @@
-import base64
 import json
-import mimetypes
 import os
-from pathlib import Path
 
 import streamlit as st
 
@@ -18,57 +15,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-FRONT_DIR = Path(__file__).resolve().parent
-ASSETS_DIR = FRONT_DIR / "assets"
-
-BACKGROUND_PATH = ASSETS_DIR / "backgrounds" / "home_background.png"
-SYMBOL_PATH = ASSETS_DIR / "logos" / "overwatch_symbol.png"
-WORDMARK_PATH = ASSETS_DIR / "logos" / "overwatch_wordmark.png"
-CHARACTER_PATH = ASSETS_DIR / "heroes" / "character.png"
-
-ROLE_TANK_ICON_PATH = ASSETS_DIR / "icons" / "role_tank.png"
-ROLE_DAMAGE_ICON_PATH = ASSETS_DIR / "icons" / "role_damage.png"
-ROLE_SUPPORT_ICON_PATH = ASSETS_DIR / "icons" / "role_support.png"
-ROLE_FLEX_ICON_PATH = ASSETS_DIR / "icons" / "role_flex.png"
-
-ARROW_LEFT_GRAY_PATH = ASSETS_DIR / "icons" / "arrow_left_gray.png"
-ARROW_LEFT_WHITE_PATH = ASSETS_DIR / "icons" / "arrow_left_white.png"
-ARROW_LEFT_ORANGE_PATH = ASSETS_DIR / "icons" / "arrow_left_orange.png"
-ARROW_RIGHT_GRAY_PATH = ASSETS_DIR / "icons" / "arrow_right_gray.png"
-ARROW_RIGHT_WHITE_PATH = ASSETS_DIR / "icons" / "arrow_right_white.png"
-ARROW_RIGHT_ORANGE_PATH = ASSETS_DIR / "icons" / "arrow_right_orange.png"
-
-CHECK_ICON_PATH = ASSETS_DIR / "icons" / "check_icon.png"
-
 # 비워 두면 브라우저의 현재 호스트와 8000번 포트를 자동으로 사용합니다.
 # EC2에서 별도 주소가 필요하면 FASTAPI_PUBLIC_URL 환경변수로 지정할 수 있습니다.
 API_BASE_URL = os.getenv("FASTAPI_PUBLIC_URL", "").strip().rstrip("/")
 
 STUDENT_INFO = "2023204017 최유진"
-
-
-# =========================================================
-# 이미지 처리
-# =========================================================
-
-@st.cache_data(show_spinner=False)
-def image_to_data_uri(image_path: Path) -> str:
-    """로컬 이미지를 Custom Component에서 사용할 Data URI로 변환합니다."""
-    if not image_path.exists():
-        st.error(
-            "이미지 파일을 찾을 수 없습니다.\n\n"
-            f"`{image_path}`"
-        )
-        st.stop()
-
-    mime_type, _ = mimetypes.guess_type(image_path.name)
-    mime_type = mime_type or "image/png"
-
-    encoded_image = base64.b64encode(
-        image_path.read_bytes()
-    ).decode("utf-8")
-
-    return f"data:{mime_type};base64,{encoded_image}"
 
 
 # =========================================================
@@ -126,39 +77,19 @@ def hide_streamlit_interface() -> None:
 
 
 # =========================================================
-# 이미지 Data URI 준비
-# =========================================================
-
-BACKGROUND_URI = image_to_data_uri(BACKGROUND_PATH)
-SYMBOL_URI = image_to_data_uri(SYMBOL_PATH)
-WORDMARK_URI = image_to_data_uri(WORDMARK_PATH)
-CHARACTER_URI = image_to_data_uri(CHARACTER_PATH)
-
-ROLE_TANK_ICON_URI = image_to_data_uri(ROLE_TANK_ICON_PATH)
-ROLE_DAMAGE_ICON_URI = image_to_data_uri(ROLE_DAMAGE_ICON_PATH)
-ROLE_SUPPORT_ICON_URI = image_to_data_uri(ROLE_SUPPORT_ICON_PATH)
-ROLE_FLEX_ICON_URI = image_to_data_uri(ROLE_FLEX_ICON_PATH)
-
-ARROW_LEFT_GRAY_URI = image_to_data_uri(ARROW_LEFT_GRAY_PATH)
-ARROW_LEFT_WHITE_URI = image_to_data_uri(ARROW_LEFT_WHITE_PATH)
-ARROW_LEFT_ORANGE_URI = image_to_data_uri(ARROW_LEFT_ORANGE_PATH)
-ARROW_RIGHT_GRAY_URI = image_to_data_uri(ARROW_RIGHT_GRAY_PATH)
-ARROW_RIGHT_WHITE_URI = image_to_data_uri(ARROW_RIGHT_WHITE_PATH)
-ARROW_RIGHT_ORANGE_URI = image_to_data_uri(ARROW_RIGHT_ORANGE_PATH)
-
-CHECK_ICON_URI = image_to_data_uri(CHECK_ICON_PATH)
-
-
-# =========================================================
 # Custom Component HTML
 # =========================================================
 
 APP_HTML = f"""
-<div id="ow-viewport">
+<div id="ow-viewport" class="assets-loading">
+    <div id="asset-loading-screen" role="status" aria-live="polite">
+        <span class="asset-loading-spinner" aria-hidden="true"></span>
+        <strong>화면을 준비하고 있어...</strong>
+    </div>
 <main id="ow-app" data-screen="home">
     <img
         class="background-image"
-        src="{BACKGROUND_URI}"
+        src="" data-asset-path="backgrounds/home_background.png" fetchpriority="high" data-essential-asset="true"
         alt=""
         draggable="false"
         aria-hidden="true"
@@ -167,7 +98,7 @@ APP_HTML = f"""
 
     <img
         class="character-image"
-        src="{CHARACTER_URI}"
+        src="" data-asset-path="heroes/character.png" fetchpriority="high"
         alt="오버워치 캐릭터"
         draggable="false"
     />
@@ -181,7 +112,7 @@ APP_HTML = f"""
         >
             <img
                 class="brand-symbol"
-                src="{SYMBOL_URI}"
+                src="" data-asset-path="logos/overwatch_symbol.png" fetchpriority="high" data-essential-asset="true"
                 alt=""
                 draggable="false"
             />
@@ -196,7 +127,7 @@ APP_HTML = f"""
     <section id="home-screen" class="screen home-screen active">
         <img
             class="home-wordmark"
-            src="{WORDMARK_URI}"
+            src="" data-asset-path="logos/overwatch_wordmark.png" fetchpriority="high" data-essential-asset="true"
             alt="Overwatch"
             draggable="false"
         />
@@ -263,7 +194,7 @@ APP_HTML = f"""
                         <span class="role-icon-circle">
                             <img
                                 class="role-icon"
-                                src="{ROLE_TANK_ICON_URI}"
+                                src="" data-asset-path="icons/role_tank.png"
                                 alt=""
                                 draggable="false"
                             />
@@ -284,7 +215,7 @@ APP_HTML = f"""
                         <span class="role-icon-circle">
                             <img
                                 class="role-icon"
-                                src="{ROLE_DAMAGE_ICON_URI}"
+                                src="" data-asset-path="icons/role_damage.png"
                                 alt=""
                                 draggable="false"
                             />
@@ -305,7 +236,7 @@ APP_HTML = f"""
                         <span class="role-icon-circle">
                             <img
                                 class="role-icon"
-                                src="{ROLE_SUPPORT_ICON_URI}"
+                                src="" data-asset-path="icons/role_support.png"
                                 alt=""
                                 draggable="false"
                             />
@@ -326,7 +257,7 @@ APP_HTML = f"""
                         <span class="role-icon-circle">
                             <img
                                 class="role-icon"
-                                src="{ROLE_FLEX_ICON_URI}"
+                                src="" data-asset-path="icons/role_flex.png"
                                 alt=""
                                 draggable="false"
                             />
@@ -794,7 +725,7 @@ APP_HTML = f"""
             >
                 <img
                     class="arrow-single"
-                    src="{ARROW_LEFT_GRAY_URI}"
+                    src="" data-asset-path="icons/arrow_left_gray.png"
                     alt=""
                     draggable="false"
                 />
@@ -820,7 +751,7 @@ APP_HTML = f"""
             >
                 <img
                     class="arrow-single"
-                    src="{ARROW_RIGHT_GRAY_URI}"
+                    src="" data-asset-path="icons/arrow_right_gray.png"
                     alt=""
                     draggable="false"
                 />
@@ -961,8 +892,56 @@ button,
     transition: opacity 120ms ease;
 }
 
-#ow-viewport.is-fitted #ow-app {
+#ow-viewport.is-fitted.assets-ready #ow-app {
     opacity: 1;
+}
+
+#asset-loading-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 100000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+
+    color: rgba(255, 255, 255, 0.86);
+    background: #0a1420;
+
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+
+    opacity: 1;
+    visibility: visible;
+
+    transition:
+        opacity 180ms ease,
+        visibility 0s linear 180ms;
+}
+
+#ow-viewport.assets-ready #asset-loading-screen {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.asset-loading-spinner {
+    width: 52px;
+    height: 52px;
+
+    border:
+        6px solid
+        rgba(255, 255, 255, 0.16);
+
+    border-top-color: var(--accent-orange);
+    border-radius: 50%;
+
+    animation:
+        result-spinner-rotate
+        760ms linear infinite;
 }
 
 .background-image,
@@ -3465,23 +3444,63 @@ export default function(component) {
         const viewportWidth = Math.max(1, window.innerWidth);
         const viewportHeight = Math.max(1, window.innerHeight);
 
+        const containScale = Math.min(
+            viewportWidth / DESIGN_WIDTH,
+            viewportHeight / DESIGN_HEIGHT
+        );
+
+        const coverScale = Math.max(
+            viewportWidth / DESIGN_WIDTH,
+            viewportHeight / DESIGN_HEIGHT
+        );
+
+        const viewportAspect =
+            viewportWidth / viewportHeight;
+
+        const designAspect =
+            DESIGN_WIDTH / DESIGN_HEIGHT;
+
+        /*
+        홈 화면은 전체 배경 구성을 모두 보여주기 위해 contain을 유지합니다.
+        캐릭터가 등장하는 화면은 가로가 더 넓은 데스크톱 환경에서만
+        cover 방식으로 확장하여 오른쪽 여백 없이 화면을 채웁니다.
+        */
+        const useEdgeToEdgeLayout =
+            app.dataset.screen !== "home"
+            && viewportAspect > designAspect
+            && viewportWidth >= 1000
+            && viewportHeight >= 650;
+
         const scale = Math.max(
             0.1,
-            Math.min(
-                viewportWidth / DESIGN_WIDTH,
-                viewportHeight / DESIGN_HEIGHT
-            )
+            useEdgeToEdgeLayout
+                ? coverScale
+                : containScale
         );
 
         const renderedWidth = DESIGN_WIDTH * scale;
         const renderedHeight = DESIGN_HEIGHT * scale;
-        const offsetX = (viewportWidth - renderedWidth) / 2;
-        const offsetY = (viewportHeight - renderedHeight) / 2;
+
+        const offsetX =
+            (viewportWidth - renderedWidth) / 2;
+
+        /*
+        cover 적용 시 상단 헤더가 잘리지 않도록 위쪽을 기준으로 맞춥니다.
+        일반 contain 모드에서는 기존처럼 정중앙에 배치합니다.
+        */
+        const offsetY = useEdgeToEdgeLayout
+            ? 0
+            : (viewportHeight - renderedHeight) / 2;
 
         app.style.transform =
             `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scale})`;
 
         app.dataset.viewportScale = String(scale);
+        app.dataset.fitMode =
+            useEdgeToEdgeLayout
+                ? "cover"
+                : "contain";
+
         viewport.classList.add("is-fitted");
     }
 
@@ -3500,6 +3519,19 @@ export default function(component) {
             { signal: viewportResizeController.signal }
         );
     }
+
+    const screenFitObserver =
+        new MutationObserver(() => {
+            fitDesignCanvas();
+        });
+
+    screenFitObserver.observe(
+        app,
+        {
+            attributes: true,
+            attributeFilter: ["data-screen"],
+        }
+    );
 
 
     const screens = {
@@ -3596,18 +3628,83 @@ export default function(component) {
         parentElement.querySelectorAll(".progress-dot")
     );
 
+    const configuredApiBaseUrl = __API_BASE_URL__;
+
+    const apiBaseUrl =
+        configuredApiBaseUrl
+        || `${window.location.protocol}//${window.location.hostname}:8000`;
+
+    const assetVersion = "20260617-2";
+
+    function uiAssetUrl(assetPath) {
+        const encodedPath = String(assetPath)
+            .split("/")
+            .map((part) => encodeURIComponent(part))
+            .join("/");
+
+        return `${apiBaseUrl}/assets/${encodedPath}?v=${assetVersion}`;
+    }
+
     const imageUris = {
-        leftGray: __ARROW_LEFT_GRAY_URI__,
-        leftWhite: __ARROW_LEFT_WHITE_URI__,
-        leftOrange: __ARROW_LEFT_ORANGE_URI__,
-        rightGray: __ARROW_RIGHT_GRAY_URI__,
-        rightWhite: __ARROW_RIGHT_WHITE_URI__,
-        rightOrange: __ARROW_RIGHT_ORANGE_URI__,
-        check: __CHECK_ICON_URI__,
+        leftGray: uiAssetUrl("icons/arrow_left_gray.png"),
+        leftWhite: uiAssetUrl("icons/arrow_left_white.png"),
+        leftOrange: uiAssetUrl("icons/arrow_left_orange.png"),
+        rightGray: uiAssetUrl("icons/arrow_right_gray.png"),
+        rightWhite: uiAssetUrl("icons/arrow_right_white.png"),
+        rightOrange: uiAssetUrl("icons/arrow_right_orange.png"),
+        check: uiAssetUrl("icons/check_icon.png"),
     };
 
-    const configuredApiBaseUrl = __API_BASE_URL__;
-    const apiBaseUrl = configuredApiBaseUrl || `${window.location.protocol}//${window.location.hostname}:8000`;
+    const uiAssetImages = Array.from(
+        parentElement.querySelectorAll(
+            "img[data-asset-path]"
+        )
+    );
+
+    const essentialAssetPromises = [];
+
+    uiAssetImages.forEach((image) => {
+        const assetPath = image.dataset.assetPath;
+
+        if (!assetPath) {
+            return;
+        }
+
+        if (image.dataset.essentialAsset === "true") {
+            essentialAssetPromises.push(
+                new Promise((resolve) => {
+                    if (image.complete) {
+                        resolve();
+                        return;
+                    }
+
+                    image.addEventListener(
+                        "load",
+                        resolve,
+                        { once: true }
+                    );
+
+                    image.addEventListener(
+                        "error",
+                        resolve,
+                        { once: true }
+                    );
+                })
+            );
+        }
+
+        image.src = uiAssetUrl(assetPath);
+    });
+
+    Promise.race([
+        Promise.allSettled(essentialAssetPromises),
+        new Promise((resolve) => {
+            window.setTimeout(resolve, 4000);
+        }),
+    ]).finally(() => {
+        viewport.classList.remove("assets-loading");
+        viewport.classList.add("assets-ready");
+    });
 
     const state = app.__owState ?? {
         screen: "home",
@@ -5378,19 +5475,13 @@ export default function(component) {
     return () => {
         abortController.abort();
         viewportResizeController.abort();
+        screenFitObserver.disconnect();
     };
 }
 """
 
 APP_JS = (
     APP_JS_TEMPLATE
-    .replace("__ARROW_LEFT_GRAY_URI__", json.dumps(ARROW_LEFT_GRAY_URI))
-    .replace("__ARROW_LEFT_WHITE_URI__", json.dumps(ARROW_LEFT_WHITE_URI))
-    .replace("__ARROW_LEFT_ORANGE_URI__", json.dumps(ARROW_LEFT_ORANGE_URI))
-    .replace("__ARROW_RIGHT_GRAY_URI__", json.dumps(ARROW_RIGHT_GRAY_URI))
-    .replace("__ARROW_RIGHT_WHITE_URI__", json.dumps(ARROW_RIGHT_WHITE_URI))
-    .replace("__ARROW_RIGHT_ORANGE_URI__", json.dumps(ARROW_RIGHT_ORANGE_URI))
-    .replace("__CHECK_ICON_URI__", json.dumps(CHECK_ICON_URI))
     .replace("__API_BASE_URL__", json.dumps(API_BASE_URL))
 )
 

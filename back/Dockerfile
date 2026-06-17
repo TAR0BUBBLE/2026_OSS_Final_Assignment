@@ -14,7 +14,7 @@ RUN python -m pip install --upgrade pip \
     && python -m pip install -r /app/back/requirements.txt
 
 COPY back /app/back
-COPY front/assets/heroes /app/front/assets/heroes
+COPY front/assets /app/front/assets
 
 EXPOSE 8000
 
